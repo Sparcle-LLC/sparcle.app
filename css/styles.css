@@ -382,9 +382,9 @@ section {
 
 .video-controls-overlay {
     position: absolute;
-    bottom: 1rem;
+    top: 1rem;
     right: 1rem;
-    opacity: 0.7;
+    opacity: 0.9;
     transition: opacity var(--transition-fast);
 }
 
