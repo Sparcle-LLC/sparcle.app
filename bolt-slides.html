@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Bolt — Enterprise AI Platform | Executive Deck</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050810;
+            --s: #0d1426;
+            --s2: #111827;
+            --b: rgba(59, 130, 246, .18);
+            --a: #3B82F6;
+            --a2: #a78bfa;
+            --g: #22d3a0;
+            --am: #f59e0b;
+            --r: #f87171;
+            --t: #f1f5f9;
+            --t2: #94a3b8;
+            --t3: #64748b
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            width: 100vw;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            font-size: clamp(14px, 1.4vw, 26px);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--t);
+            overflow: hidden;
+        }
+
+        /* SHELL */
+        #deck {
+            width: 100vw;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* SLIDE VIEWPORT */
+        #viewport {
+            flex: 1 1 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 65px;
+            /* Give space for absolute footer */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 4rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(80px);
+            pointer-events: none;
+            transition: opacity .45s ease, transform .45s ease, visibility .45s;
+            will-change: transform;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            z-index: 10;
+            visibility: visible;
+        }
+
+        .slide.out-left {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-80px);
+            z-index: 1;
+        }
+
+        /* SLIDE INNER */
+        .s-content {
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .s-tag {
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--a);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            margin-bottom: .9rem
+        }
+
+        .s-tag::before {
+            content: '';
+            width: 28px;
+            height: 2px;
+            background: var(--a)
+        }
+
+        h1.s-h {
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -.03em
+        }
+
+        h2.s-h {
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.02em
+        }
+
+        .grad {
+            background: linear-gradient(135deg, #6378ff, #a78bfa 40%, #22d3a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .s-sub {
+            color: var(--t2);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-top: .9rem;
+        }
+
+        /* CXO VALUE ADDITIONS */
+        .roi-callout {
+            background: rgba(34, 211, 160, 0.08);
+            border: 1px solid rgba(34, 211, 160, 0.3);
+            border-left: 4px solid var(--g);
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(34, 211, 160, 0.1);
+        }
+
+        .roi-callout.alert {
+            background: rgba(248, 113, 113, 0.08);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-left-color: var(--r);
+            box-shadow: 0 4px 20px rgba(248, 113, 113, 0.1);
+        }
+
+        .media-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 100px;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--t3);
+            font-weight: 600;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all .2s;
+        }
+
+        .media-placeholder:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.04);
+            box-shadow: inset 0 0 30px rgba(59, 130, 246, 0.05);
+        }
+
+        .media-placeholder span {
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0.7;
+        }
+
+        /* GRID LAYOUTS */
+        .g2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.8rem
+        }
+
+        .g3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 1.8rem
+        }
+
+        .g4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.8rem
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--s);
+            border: 1px solid var(--b);
+            border-radius: 14px;
+            padding: 1.5rem;
+            transition: all .2s
+        }
+
+        .card:hover {
+            border-color: rgba(59, 130, 246, .6);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, .15);
+            transform: translateY(-2px)
+        }
+
+        .card h3 {
+            font-size: .95rem;
+            font-weight: 700;
+            margin: .6rem 0 .4rem
+        }
+
+        .card p {
+            font-size: .82rem;
+            color: var(--t2);
+            line-height: 1.6
+        }
+
+        .card .ci {
+            color: var(--a);
+            display: flex;
+            margin-bottom: .25rem
+        }
+
+        /* PAIN ITEMS */
+        .pain {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(248, 113, 113, .06);
+            border: 1px solid rgba(248, 113, 113, .2);
+            border-radius: 10px;
+            margin-bottom: .5rem
+        }
+
+        .pain .pi {
+            color: var(--r);
+            flex-shrink: 0;
+            margin-top: .1rem
+        }
+
+        .pain strong {
+            color: var(--t);
+            display: block;
+            font-size: .85rem;
+            margin-bottom: .2rem
+        }
+
+        .pain p {
+            font-size: .8rem;
+            color: var(--t2);
+            margin: 0;
+            line-height: 1.5
+        }
+
+        /* STAT BLOCKS */
+        .stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap
+        }
+
+        .stat .n {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--a), var(--a2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .stat .l {
+            font-size: .72rem;
+            color: var(--t3);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: .15rem
+        }
+
+        /* SECURITY LAYERS */
+        .layer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: .75rem 1.25rem;
+            background: var(--s);
+            border-left: 3px solid var(--a);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: .5rem;
+            font-size: .85rem
+        }
+
+        .layer .ln {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--a);
+            font-size: .72rem;
+            font-weight: 600;
+            min-width: 22px
+        }
+
+        .layer .ll {
+            color: var(--t);
+            font-weight: 600;
+            min-width: 190px
+        }
+
+        .layer .ld {
+            color: var(--t2);
+            font-size: .8rem
+        }
+
+        /* BADGES */
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-top: .9rem
+        }
+
+        .badge {
+            padding: .25rem .7rem;
+            border-radius: 50px;
+            font-size: .72rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, .14);
+            color: var(--a);
+            border: 1px solid rgba(59, 130, 246, .22)
+        }
+
+        .badge.g {
+            background: rgba(34, 211, 160, .1);
+            color: var(--g);
+            border-color: rgba(34, 211, 160, .22)
+        }
+
+        /* COMPARE TABLE */
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+            margin-top: 1.5rem
+        }
+
+        .tbl th,
+        .tbl td {
+            padding: .75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--b)
+        }
+
+        .tbl th {
+            font-weight: 600;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--t);
+            background: rgba(59, 130, 246, .08)
+        }
+
+        .tbl td {
+            color: var(--t2)
+        }
+
+        .tbl tr:hover td {
+            background: rgba(255, 255, 255, .02)
+        }
+
+        .ck {
+            color: var(--g);
+            font-weight: 700
+        }
+
+        .cx {
+            color: var(--t3)
+        }
+
+        .cp {
+            color: var(--am)
+        }
+
+        .hl {
+            color: var(--t);
+            font-weight: 600
+        }
+
+        /* VERTICAL TIMELINE */
+        .timeline {
+            margin-top: 1.5rem
+        }
+
+        .tl-item {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--b)
+        }
+
+        .tl-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0
+        }
+
+        .tl-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--a), var(--a2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: .8rem;
+            flex-shrink: 0;
+            margin-top: .15rem
+        }
+
+        .tl-text h3 {
+            font-size: .9rem;
+            font-weight: 700
+        }
+
+        .tl-text p {
+            font-size: .82rem;
+            color: var(--t2);
+            margin-top: .2rem;
+            line-height: 1.55
+        }
+
+        /* MCP TILES */
+        .mcps {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: .6rem;
+            margin-top: 1.5rem
+        }
+
+        .mcp {
+            background: var(--s);
+            border: 1px solid var(--b);
+            border-radius: 8px;
+            padding: .65rem .85rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .8rem;
+            font-weight: 500
+        }
+
+        .mcp .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--g);
+            flex-shrink: 0
+        }
+
+        /* PLATFORMS */
+        .plats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem
+        }
+
+        .plat {
+            background: var(--s);
+            border: 1px solid var(--b);
+            border-radius: 12px;
+            padding: 1.1rem;
+            text-align: center
+        }
+
+        .plat .pi2 {
+            color: var(--a);
+            display: flex;
+            justify-content: center;
+            margin-bottom: .5rem
+        }
+
+        .plat strong {
+            display: block;
+            font-size: .85rem
+        }
+
+        .plat p {
+            font-size: .72rem;
+            color: var(--t2);
+            margin-top: .2rem
+        }
+
+        /* HERO BG */
+        .hbg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 900px 600px at 50% 40%, rgba(59, 130, 246, .2), transparent 70%);
+            pointer-events: none;
+            z-index: 0
+        }
+
+        .slide.hero {
+            text-align: center;
+            align-items: center
+        }
+
+        .slide.hero .s-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1
+        }
+
+        .slide.hero .s-tag {
+            justify-content: center
+        }
+
+        /* CODE BLOCK */
+        .code {
+            background: var(--s2);
+            border: 1px solid var(--b);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .78rem;
+            line-height: 1.8;
+            color: var(--a2);
+            margin-top: 1rem
+        }
+
+        .code .cm {
+            color: var(--t3)
+        }
+
+        .code .cv {
+            color: var(--g)
+        }
+
+        /* PII FLOW */
+        .pii-flow {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            margin-top: 1.25rem
+        }
+
+        .pii-row {
+            padding: .65rem 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .8rem
+        }
+
+        .pii-r {
+            background: rgba(248, 113, 113, .08);
+            border-left: 3px solid var(--r);
+            color: var(--r)
+        }
+
+        .pii-a {
+            background: rgba(245, 158, 11, .08);
+            border-left: 3px solid var(--am);
+            color: var(--am)
+        }
+
+        .pii-g {
+            background: rgba(34, 211, 160, .08);
+            border-left: 3px solid var(--g);
+            color: var(--g)
+        }
+
+        .pii-lbl {
+            font-size: .7rem;
+            color: var(--t3);
+            margin: .3rem 0 .1rem .5rem;
+            font-family: 'Inter', sans-serif
+        }
+
+        /* QUOTE SLIDE */
+        .blockquote {
+            border-left: 4px solid var(--a);
+            padding: 1.25rem 1.75rem;
+            background: rgba(59, 130, 246, .06);
+            border-radius: 0 12px 12px 0;
+            margin-top: 1.5rem
+        }
+
+        .blockquote p {
+            font-size: 1.15rem;
+            color: var(--t);
+            line-height: 1.7;
+            font-style: italic
+        }
+
+        .blockquote cite {
+            font-size: .8rem;
+            color: var(--t3);
+            margin-top: .75rem;
+            display: block
+        }
+
+        /* CTA SLIDE */
+        .cta-links {
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .btn {
+            padding: .8rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: .9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            transition: all .2s
+        }
+
+        .btn-p {
+            background: linear-gradient(135deg, var(--a), var(--a2));
+            color: #fff;
+            box-shadow: 0 4px 24px rgba(59, 130, 246, .4)
+        }
+
+        .btn-p:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, .5)
+        }
+
+        .btn-o {
+            background: transparent;
+            color: var(--t);
+            border: 1px solid var(--b)
+        }
+
+        .btn-o:hover {
+            border-color: var(--a);
+            color: var(--a)
+        }
+
+        /* CONTROLS */
+        #controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 8, 16, .92);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--b);
+            padding: .75rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 1000;
+        }
+
+        #slide-counter {
+            font-size: .8rem;
+            color: var(--t3);
+            font-weight: 600;
+            min-width: 80px
+        }
+
+        #progress-track {
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--a), var(--a2));
+            border-radius: 2px;
+            transition: width .4s ease
+        }
+
+        .ctrl-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--b);
+            background: var(--s);
+            color: var(--t2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s
+        }
+
+        .ctrl-btn:hover {
+            border-color: var(--a);
+            color: var(--a);
+            background: rgba(59, 130, 246, .1)
+        }
+
+        .ctrl-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed
+        }
+
+        #slides-nav {
+            display: flex;
+            gap: .35rem;
+            align-items: center
+        }
+
+        .nav-dot {
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .15);
+            transition: all .2s;
+        }
+
+        .nav-dot.active::after {
+            background: var(--a);
+            transform: scale(1.6);
+        }
+
+        #slide-title-bar {
+            font-size: .78rem;
+            color: var(--t3);
+            min-width: 200px;
+            text-align: center
+        }
+
+        /* SLIDE BG VARIANTS */
+        .slide.dark-hero {
+            background: radial-gradient(ellipse 1200px 700px at 50% 30%, rgba(59, 130, 246, .15), transparent 65%)
+        }
+
+        .slide.s-accent {
+            background: radial-gradient(circle 600px at 90% 50%, rgba(167, 139, 250, .08), transparent 70%)
+        }
+
+        /* ANIM ON ACTIVE */
+        .slide.active .card,
+        .slide.active .pain,
+        .slide.active .layer,
+        .slide.active .tl-item,
+        .slide.active .mcp,
+        .slide.active .plat {
+            animation: fadeUp .4s ease both
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .slide.active .card:nth-child(2) {
+            animation-delay: .07s
+        }
+
+        .slide.active .card:nth-child(3) {
+            animation-delay: .14s
+        }
+
+        .slide.active .card:nth-child(4) {
+            animation-delay: .21s
+        }
+
+        .slide.active .card:nth-child(5) {
+            animation-delay: .28s
+        }
+
+        .slide.active .card:nth-child(6) {
+            animation-delay: .35s
+        }
+
+        .slide.active .pain:nth-child(2) {
+            animation-delay: .08s
+        }
+
+        .slide.active .pain:nth-child(3) {
+            animation-delay: .16s
+        }
+
+        .slide.active .pain:nth-child(4) {
+            animation-delay: .24s
+        }
+
+        .slide.active .layer:nth-child(2) {
+            animation-delay: .07s
+        }
+
+        .slide.active .layer:nth-child(n+3) {
+            animation-delay: .14s
+        }
+    </style>
+</head>
+
+<body>
+    <div id="deck">
+        <div id="viewport">
+
+            <!-- ═══ SLIDE 1 — HERO ═══ -->
+            <div class="slide hero dark-hero active" data-title="Bolt — Enterprise AI Platform">
+                <div class="hbg"></div>
+                <div class="s-content">
+                    <div style="margin-bottom: 2rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"
+                            style="width: 80px; height: 80px;">
+                            <circle cx="256" cy="256" r="240" fill="#1a1a2e" />
+                            <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="#4285F4" stroke="#5c9cff"
+                                stroke-width="8" stroke-linejoin="round" />
+                            <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="url(#glow)" opacity="0.3" />
+                            <defs>
+                                <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+                                    <stop offset="100%" style="stop-color:#4285F4;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="s-tag">Bolt Enterprise AI · 2026</div>
+                    <h1 class="s-h" style="font-size:clamp(3rem,7vw,5.5rem)">The Enterprise<br><span class="grad">AI
+                            Layer</span><br>Your Team Needs</h1>
+                    <p class="s-sub" style="text-align:center;margin:1.25rem auto;max-width:620px">Bolt plugs into every
+                        system your organization already uses — and gives every employee a unified, secure,
+                        enterprise-grade AI
+                        assistant. No replacement. No migration. No friction.</p>
+                    <div class="stats" style="justify-content:center">
+                        <div class="stat">
+                            <div class="n">40%</div>
+                            <div class="l">Productivity Recovered</div>
+                        </div>
+                        <div class="stat">
+                            <div class="n">Day 1</div>
+                            <div class="l">Time to Value</div>
+                        </div>
+                        <div class="stat">
+                            <div class="n">60–80%</div>
+                            <div class="l">LLM Cost Reduction</div>
+                        </div>
+                        <div class="stat">
+                            <div class="n">3</div>
+                            <div class="l">Patents Pending</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SLIDE 2 — PROBLEM ═══ -->
+            <div class="slide" data-title="The Problem">
+                <div class="s-content">
+                    <div class="s-tag">The Challenge</div>
+                    <h2 class="s-h">Your team loses <span class="grad">40% of their day</span> switching between tools
+                    </h2>
+                    <p class="s-sub" style="margin-top:0.5rem;font-size:0.95rem;">Knowledge workers juggle 9–11
+                        applications daily. Every context switch drains
+                        focus, slows execution, and erodes competitive advantage.</p>
+
+                    <div class="roi-callout alert"
+                        style="margin: 0.5rem 0 1rem 0; width: 100%; box-sizing: border-box; padding: 1rem 1.25rem;">
+                        <div><i data-lucide="alert-triangle" style="width:28px;height:28px;color:var(--r)"></i></div>
+                        <div>
+                            <strong style="display:block;color:var(--t);margin-bottom:.2rem;font-size:1.05rem">The
+                                Hidden Tax</strong>
+                            <span style="color:var(--t2);font-size:0.9rem">Given average salaries, organizations lose
+                                millions annually and 40% of employee productivity strictly to context switching and
+                                information siloing.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pain">
+                            <div class="pi"><i data-lucide="timer" style="width:18px;height:18px"></i></div>
+                            <div><strong>23-minute recovery time per context switch</strong>
+                                <p>One interruption costs nearly a half-hour of deep work. At 100 employees, that's
+                                    millions of lost productive hours annually.</p>
+                            </div>
+                        </div>
+                        <div class="pain">
+                            <div class="pi"><i data-lucide="layout-dashboard" style="width:18px;height:18px"></i></div>
+                            <div><strong>The answer exists — in 5 different places</strong>
+                                <p>Email in Gmail. Docs in SharePoint. Tasks in Jira. Updates in Slack. The data your
+                                    team needs is scattered, siloed, and unreachable in real time.</p>
+                            </div>
+                        </div>
+                        <div class="pain">
+                            <div class="pi"><i data-lucide="shield-off" style="width:18px;height:18px"></i></div>
+                            <div><strong>Generic AI tools aren't enterprise-safe</strong>
+                                <p>ChatGPT, Copilot, and Gemini send data to external servers without fine-grained
+                                    access control, audit trails, or PII protection.</p>
+                            </div>
+                        </div>
+                        <div class="pain">
+                            <div class="pi"><i data-lucide="dollar-sign" style="width:18px;height:18px"></i></div>
+                            <div><strong>Every point solution means new budget, migration, and change
+                                    management</strong>
+                                <p>Glean, Guru, Notion AI — each demands a contract, a rollout, and 6+ months before ROI
+                                    materializes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SLIDE 3 — VISION ═══ -->
+            <div class="slide s-accent" data-title="The Vision">
+                <div class="s-content" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+                    <div class="s-tag" style="justify-content:center">The Bolt Vision</div>
+                    <h2 class="s-h">A <span class="grad">brilliant assistant</span><br>for every employee</h2>
+                    <p class="s-sub" style="text-align:center;margin:1rem auto">Not a chatbot. Not a search bar. A
+                        unified, intelligent layer that understands your company’s entire context and surfaces the right
+                        answers instantly.</p>
+                    <div class="blockquote" style="max-width:680px;text-align:left">
+                        <p>"Amplify your team. Make every workflow faster and every employee more effective, without
+                            replacing a single tool."</p>
+                        <cite>— Bolt Design Principle</cite>
+                    </div>
+                    <div class="stats" style="margin-top:2rem">
+                        <div class="stat">
+                            <div class="n">70–90%</div>
+                            <div class="l">Cache Hit Rate</div>
+                        </div>
+                        <div class="stat">
+                            <div class="n">9–11</div>
+                            <div class="l">Apps Unified</div>
+                        </div>
+                        <div class="stat">
+                            <div class="n">0</div>
+                            <div class="l">Tools Replaced</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ SLIDE 4 — HOW IT WORKS ═══ -->
+            <div class="slide" data-title="How Bolt Works">
+                <div class="s-content">
+                    <div class="s-tag">How It Works</div>
+                    <h2 class="s-h">One keystroke. <span class="grad">Every answer.</span></h2>
+                    <p class="s-sub">Press <code
+                            style="background:var(--s2);padding:.1rem .5rem;border-radius:4px;font-family:monospace;color:var(--a2)">Cmd+Shift+K</code>
+                        anywhere. Bolt appears instantly over your focused application.</p>
+
+                    <div class="g2" style="margin-top:1rem; align-items: stretch;">
+                        <div style="display:flex;flex-direction:column;gap:1rem">
+                            <div class="card" style="padding:1.25rem">
+                                <div class="ci"><i data-lucide="zap" style="width:22px;height:22px"></i></div>
+                                <h3>Ask in Plain English</h3>
+                                <p>No training required. Ask exactly like you'd ask a smart colleague. Full context is
+                                    assembled automatically.</p>
+                            </div>
+                            <div class="card" style="padding:1.25rem">
+                                <div class="ci"><i data-lucide="git-branch" style="width:22px;height:22px"></i></div>
+                                <h3>Parallel Tool Execution</h3>
+                                <p>Bolt queries Gmail, Jira, Slack, GitHub, Calendar simultaneously. Answer in
+                                    milliseconds, not minutes.</p>
+                            </div>
+                            <div class="card" style="padding:1.25rem">
+                                <div class="ci"><i data-lucide="target" style="width:22px;height:22px"></i></div>
+                                <h3>The One Thing™</h3>
+                                <p>Patented priority engine cross-ranks all items across all systems.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <img src="images/bolt.gif" alt="Bolt Demo Animation"
+                                style="width:100%; height:100%; object-fit:contain; border-radius:8px; border:1px solid var(--b); box-shadow:0 0 40px rgba(59,130,246,0.15);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ═══ SLIDE 5 — ONE THING PRIORITY ENGINE ═══ -->
+    <div class="slide" data-title="The One Thing™ Priority Engine">
+        <div class="s-content">
+            <div class="s-tag">Patent Pending · US 63/952,801</div>
+            <h2 class="s-h">The <span class="grad">One Thing™</span> Priority Engine</h2>
+            <p class="s-sub">The first system to cross-rank items across all enterprise applications using
+                organizational intelligence — without manual tagging or configuration.</p>
+
+            <div class="g2">
+                <div>
+                    <div class="roi-callout"
+                        style="margin: 0 0 1.5rem 0; width: 100%; box-sizing: border-box; padding: 1rem 1.25rem;">
+                        <div><i data-lucide="trending-up" style="width:28px;height:28px;color:var(--g)"></i></div>
+                        <div>
+                            <strong style="display:block;color:var(--t);margin-bottom:.2rem;font-size:1.05rem">Instant
+                                ROI
+                                via Productivity</strong>
+                            <span style="color:var(--t2);font-size:0.9rem">Reclaims 2+ hours per employee, every single
+                                week, by eliminating decision fatigue and instantly surfacing the highest leverage
+                                tasks.</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="tl-item" style="margin-bottom:0.75rem">
+                            <div class="tl-num" style="width:26px;height:26px;font-size:0.75rem;">1</div>
+                            <div class="tl-text">
+                                <h3 style="margin-bottom:0.1rem;font-size:0.85rem;">Cross-System Normalization</h3>
+                                <p style="margin:0;font-size:0.78rem;">Email, calendar, Jira, Slack — all mapped to a
+                                    unified scoreable
+                                    representation regardless of source.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item" style="margin-bottom:0.75rem">
+                            <div class="tl-num" style="width:26px;height:26px;font-size:0.75rem;">2</div>
+                            <div class="tl-text">
+                                <h3 style="margin-bottom:0.1rem;font-size:0.85rem;">5-Factor Weighted Scoring</h3>
+                                <p style="margin:0;font-size:0.78rem;">Urgency (35%) + Impact (25%) + Relationship (20%)
+                                    + Action Clarity (15%) +
+                                    Context Relevance (5%)</p>
+                            </div>
+                        </div>
+                        <div class="tl-item" style="margin-bottom:0.75rem">
+                            <div class="tl-num" style="width:26px;height:26px;font-size:0.75rem;">3</div>
+                            <div class="tl-text">
+                                <h3 style="margin-bottom:0.1rem;font-size:0.85rem;">Org Hierarchy Inference</h3>
+                                <p style="margin:0;font-size:0.78rem;">Dynamically infers sender proximity (manager, VP,
+                                    CEO, peer) from identity
+                                    metadata at scoring time — no org chart needed.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item" style="margin-bottom:0">
+                            <div class="tl-num" style="width:26px;height:26px;font-size:0.75rem;">4</div>
+                            <div class="tl-text">
+                                <h3 style="margin-bottom:0.1rem;font-size:0.85rem;">Single Output: The One Thing</h3>
+                                <p style="margin:0;font-size:0.78rem;">One item. Clear reasoning. Delivered proactively
+                                    — no query required.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card"
+                    style="display:flex;flex-direction:column;justify-content:center;gap:0.75rem;padding:1.4rem">
+                    <div
+                        style="padding:1rem;background:rgba(99,120,255,.08);border-radius:10px;border:1px solid var(--b)">
+                        <p style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;font-family:monospace">
+                            Right now, your One Thing is:</p>
+                        <p style="font-weight:700;color:var(--t);font-size:.85rem">"Reply to Sarah (VP Eng) —
+                            production P0 alert requires your approval"</p>
+                        <div class="badges" style="margin-top:.6rem"><span class="badge"
+                                style="background:rgba(248,113,113,.12);color:var(--r);border-color:rgba(248,113,113,.2)">Urgency:
+                                Critical</span><span class="badge g">Impact: Revenue</span><span class="badge">Manager:
+                                Yes</span></div>
+                    </div>
+                    <p style="font-size:.82rem;color:var(--t2);text-align:center">Signal extracted from Noise in 340ms
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 6 — AUTH / SSO ═══ -->
+    <div class="slide" data-title="Enterprise Auth & SSO">
+        <div class="s-content">
+            <div class="s-tag">Identity &amp; Access</div>
+            <h2 class="s-h">Enterprise SSO — <span class="grad">any provider, one config</span></h2>
+            <p class="s-sub">Bolt speaks OIDC, SAML, and OAuth 2.1 natively. Connect your existing identity
+                provider in minutes with a single configuration block. Zero custom code.</p>
+            <div class="g2">
+                <div>
+                    <div class="badges" style="margin:.5rem 0 1rem">
+                        <span class="badge">Google Workspace</span><span class="badge">Microsoft Azure
+                            AD</span><span class="badge">Okta</span><span class="badge">Auth0</span><span
+                            class="badge">Generic OIDC</span><span class="badge">Zoho</span>
+                    </div>
+                    <div class="badges"><span class="badge g">JWT Sessions</span><span class="badge g">PKCE
+                            OAuth 2.1</span><span class="badge g">Refresh Tokens</span><span class="badge g">Incremental
+                            Consent</span><span class="badge g">MCP Per-User
+                            OAuth</span></div>
+                    <div style="margin-top:1.25rem">
+                        <div class="tl-item">
+                            <div class="tl-num" style="width:28px;height:28px;font-size:.72rem">1</div>
+                            <div class="tl-text">
+                                <h3>No Client Token Storage</h3>
+                                <p>Ephemeral, encrypted session tunnels. Zero sensitive credentials persist on
+                                    the client device.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item">
+                            <div class="tl-num" style="width:28px;height:28px;font-size:.72rem">2</div>
+                            <div class="tl-text">
+                                <h3>Advanced Data Scrubbing</h3>
+                                <p>Zero PII in LLM prompts or immutable audit logs. All data is anonymized at
+                                    the edge.</p>
+                            </div>
+                        </div>
+                        <div class="tl-item">
+                            <div class="tl-num" style="width:28px;height:28px;font-size:.72rem">3</div>
+                            <div class="tl-text">
+                                <h3>Audit Trail on Every Request</h3>
+                                <p>Every query, tool call, and data access is logged with user identity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="code">
+                        <span class="cm"># Switch IdP in one line</span>
+                        platform:
+                        identity:
+                        provider: <span class="cv">"microsoft"</span>
+                        client_id: <span class="cv">"${AZURE_CLIENT_ID}"</span>
+                        tenant_id: <span class="cv">"${TENANT_ID}"</span>
+
+                        <span class="cm"># Or Google Workspace:</span>
+                        provider: <span class="cv">"google"</span>
+
+                        <span class="cm"># Or Okta:</span>
+                        provider: <span class="cv">"okta"</span>
+                        domain: <span class="cv">"corp.okta.com"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 7 — PRIVACY / PII ═══ -->
+    <div class="slide" data-title="Privacy & PII Protection">
+        <div class="s-content">
+            <div class="s-tag">Compliance & Governance · SOC 2 & HIPAA Ready</div>
+            <h2 class="s-h">Secure by Design. <span class="grad">Zero Trust Architecture.</span></h2>
+            <p class="s-sub">Bolt operates via safe, session-bound encrypted tokens. Before leaving your boundary,
+                Bolt's edge-anonymization engine automatically strips sensitive PII. The LLM only ever reasons on
+                scrubbed, compliant tokens.</p>
+            <div class="g2">
+                <div>
+                    <div class="card"
+                        style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:3rem">
+                        <i data-lucide="shield" style="width:48px;height:48px;color:var(--g);margin-bottom:1rem"></i>
+                        <h3 style="font-size:1.5rem;margin-bottom:.5rem">100% PII Protected</h3>
+                        <p style="color:var(--t2)">All sensitive data is anonymized at the edge before ever reaching an
+                            LLM.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="g2" style="margin-top:0;grid-template-columns:1fr 1fr">
+                        <div class="card"><i data-lucide="shield-check"
+                                style="color:var(--g);width:20px;height:20px;margin-bottom:.5rem"></i>
+                            <h3>HIPAA-Ready</h3>
+                            <p style="font-size:.78rem">PHI never exposed to cloud LLMs</p>
+                        </div>
+                        <div class="card"><i data-lucide="file-check"
+                                style="color:var(--g);width:20px;height:20px;margin-bottom:.5rem"></i>
+                            <h3>GDPR Aligned</h3>
+                            <p style="font-size:.78rem">Personal data pseudonymized by default</p>
+                        </div>
+                        <div class="card"><i data-lucide="lock"
+                                style="color:var(--g);width:20px;height:20px;margin-bottom:.5rem"></i>
+                            <h3>SOC 2 Ready</h3>
+                            <p style="font-size:.78rem">Complete audit log of every request</p>
+                        </div>
+                        <div class="card"><i data-lucide="eye-off"
+                                style="color:var(--g);width:20px;height:20px;margin-bottom:.5rem"></i>
+                            <h3>Zero Data Egress</h3>
+                            <p style="font-size:.78rem">Private LLM option = no data leaves</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 8 — LLM + SECURITY LAYERS ═══ -->
+    <div class="slide" data-title="Security Architecture">
+        <div class="s-content">
+            <div class="s-tag">SOC 2 & HIPAA Ready · Zero Trust</div>
+            <h2 class="s-h"><span class="grad">8-Layer</span> Security Pipeline</h2>
+            <p class="s-sub">Every request traverses a sequential security pipeline before reaching the AI.
+                Enterprise-grade. Auditable. No shortcuts.</p>
+            <div class="g2">
+                <div>
+                    <div class="layer"><span class="ln">L1</span><span class="ll">Identity
+                            Validation</span><span class="ld">JWT · SAML · OIDC on every request</span></div>
+                    <div class="layer"><span class="ln">L2</span><span class="ll">Advanced Data
+                            Scrubbing</span><span class="ld">Zero PII in LLM prompts or audit logs</span></div>
+                    <div class="layer"><span class="ln">L3</span><span class="ll">Policy Guardrails</span><span
+                            class="ld">RBAC · content filtering · tool ACL</span></div>
+                    <div class="layer"><span class="ln">L4</span><span class="ll">Rate Limiting</span><span
+                            class="ld">Redis-backed per-user & per-org</span></div>
+                    <div class="layer"><span class="ln">L5</span><span class="ll">Multi-Tier Caching</span><span
+                            class="ld">RAG → Redis → LLM</span></div>
+                    <div class="layer"><span class="ln">L6</span><span class="ll">Audit Logging</span><span
+                            class="ld">Immutable trail: every query & tool call</span></div>
+                    <div class="layer"><span class="ln">L7</span><span class="ll">No Client Token
+                            Storage</span><span class="ld">Ephemeral, encrypted session tunnels</span></div>
+                    <div class="layer"><span class="ln">L8</span><span class="ll">PII Restoration</span><span
+                            class="ld">Reverse-map tokens before response</span></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                    <div class="card">
+                        <div class="ci"><i data-lucide="cpu" style="width:20px;height:20px"></i></div>
+                        <h3>Pluggable LLM Backend</h3>
+                        <p>OpenAI · Anthropic Claude · Google Gemini · Ollama · vLLM · NVIDIA NIM · Any
+                            OpenAI-compatible endpoint. Switch in one config line.</p>
+                        <div class="badges"><span class="badge g">Private / On-Prem</span><span class="badge g">60–80%
+                                Cost
+                                Reduction</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="ci"><i data-lucide="database" style="width:20px;height:20px"></i></div>
+                        <h3>Bolt Data MCP (Optional)</h3>
+                        <p>Unified knowledge store indexing entire organization data. Users and AI only see the exact
+                            information they are authorized to access.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 9 — INTEGRATIONS ═══ -->
+    <div class="slide" data-title="Integrations & MCP Ecosystem">
+        <div class="s-content">
+            <div class="s-tag">Integrations</div>
+            <h2 class="s-h">Connect <span class="grad">everything</span> your team already uses</h2>
+            <p class="s-sub">Bolt supports the Model Context Protocol (MCP) — the emerging open standard for AI
+                tool integration. Any MCP server = instant new capabilities for every user.</p>
+            <div class="mcps" style="grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem;">
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Microsoft 365
+                </div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Google
+                    Workspace</div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Slack</div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>GitHub</div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Jira</div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Salesforce
+                </div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Notion</div>
+                <div class="mcp" style="padding: 1rem 1.5rem; font-size: 1rem;"><span class="dot"></span>Zendesk</div>
+                <div class="mcp"
+                    style="padding: 1rem 1.5rem; font-size: 1rem; background: transparent; border: none; justify-content: center; color: var(--a);">
+                    <span style="font-weight: 700;">+ Lots more</span>
+                </div>
+            </div>
+            <div class="g3" style="margin-top:1rem">
+                <div class="card">
+                    <div class="ci"><i data-lucide="plug" style="width:18px;height:18px"></i></div>
+                    <h3>Plugins &amp; Extensions</h3>
+                    <p>Drop in custom modules — data sources, automations, UI — without touching core.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="wand-2" style="width:18px;height:18px"></i></div>
+                    <h3>Agent Skills</h3>
+                    <p>Pre-built enterprise skills: draft email, file ticket, schedule meeting, summarize thread.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="server" style="width:18px;height:18px"></i></div>
+                    <h3>Custom MCP Servers</h3>
+                    <p>OAuth 2.1 PKCE, API key, identity passthrough. Full self-service for IT teams.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 10 — PLATFORMS ═══ -->
+    <div class="slide" data-title="Every Platform">
+        <div class="s-content">
+            <div class="s-tag">Platform Coverage</div>
+            <h2 class="s-h">One Bolt. <span class="grad">Every surface.</span></h2>
+            <p class="s-sub">Bolt deploys across your entire fleet effortlessly — From Browser to Native on each
+                platform. The global hotkey works system-wide, even when Bolt isn't the focused
+                window.</p>
+            <div class="plats">
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="monitor" style="width:28px;height:28px"></i></div>
+                    <strong>macOS</strong>
+                    <p>Native app · Global hotkey · Menu bar · Auto-update</p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="monitor" style="width:28px;height:28px"></i></div>
+                    <strong>Windows</strong>
+                    <p>Native app · System tray · Auto-start on login</p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="terminal" style="width:28px;height:28px"></i></div>
+                    <strong>Linux</strong>
+                    <p>AppImage · Deb · RPM packages</p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="globe" style="width:28px;height:28px"></i></div><strong>Web
+                        Browser</strong>
+                    <p>Chrome, Firefox, Safari, Edge</p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="puzzle" style="width:28px;height:28px"></i></div>
+                    <strong>Browser Extension</strong>
+                    <p>Chrome &amp; Firefox · Overlay on any page</p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="tablet-smartphone" style="width:28px;height:28px"></i>
+                    </div><strong>iOS</strong>
+                    <p>Native app · PWA </p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="tablet-smartphone" style="width:28px;height:28px"></i>
+                    </div><strong>Android</strong>
+                    <p>Native app · PWA </p>
+                </div>
+                <div class="plat">
+                    <div class="pi2"><i data-lucide="server" style="width:28px;height:28px"></i></div>
+                    <strong>Self-Hosted</strong>
+                    <p>Deploy bolt-api anywhere — cloud, on-prem, air-gapped</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 11 — USE CASES ═══ -->
+    <div class="slide" data-title="Executive Use Cases">
+        <div class="s-content">
+            <div class="s-tag">Real-World Value</div>
+            <h2 class="s-h">The work your team does <span class="grad">every day</span></h2>
+            <div class="g2">
+                <div class="card">
+                    <div class="ci"><i data-lucide="sunrise" style="width:20px;height:20px"></i></div>
+                    <h3>Morning Priority Brief</h3>
+                    <p>"What do I need to handle before my 9am?" Bolt reads email, calendar, Jira, and Slack —
+                        surfaces a prioritized action list in 3 seconds.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="presentation" style="width:20px;height:20px"></i></div>
+                    <h3>Meeting Prep in Seconds</h3>
+                    <p>"Summarize everything relevant to the Acme deal this week." Bolt pulls emails, tasks, and
+                        meeting notes in one brief.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="alert-triangle" style="width:20px;height:20px"></i></div>
+                    <h3>Incident Response</h3>
+                    <p>"What's the status of the production outage?" Checks PagerDuty, Jira, Slack, and GitHub
+                        in parallel. One answer, instantly.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="mail-check" style="width:20px;height:20px"></i></div>
+                    <h3>Draft &amp; Prepare</h3>
+                    <p>"Draft a follow-up to John's email about the Q1 contract." Context-aware
+                        drafting with your voice and approval before it's finalized.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="search" style="width:20px;height:20px"></i></div>
+                    <h3>Cross-System Search</h3>
+                    <p>"Find the latest NDA we sent to TechCorp." Searches Drive, SharePoint, Gmail, and Notion
+                        simultaneously. Sources cited.</p>
+                </div>
+                <div class="card">
+                    <div class="ci"><i data-lucide="git-pull-request" style="width:20px;height:20px"></i></div>
+                    <h3>Engineering Context</h3>
+                    <p>"What's blocking the auth PR?" Checks GitHub PR status, linked Jira ticket, and Slack
+                        thread. Full context, one place.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 12 — ADMIN DASHBOARD ═══ -->
+    <div class="slide" data-title="Company-Wide ROI Dashboard">
+        <div class="s-content" style="display:flex;flex-direction:column;height:100%">
+            <div class="s-tag">Provable Value</div>
+            <h2 class="s-h">Track your <span class="grad">exact ROI</span> in real-time</h2>
+            <div style="flex:1;margin-top:1.5rem;display:flex">
+                <img src="images/dashboard.png" alt="Admin Dashboard"
+                    style="width:100%; height:100%; max-height: 100%; object-fit:contain; aspect-ratio: 16/9; margin: 0 auto; border-radius:12px; border:1px solid var(--b); box-shadow:0 8px 32px rgba(59,130,246,0.2);">
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 13 — COMPETITIVE ═══ -->
+    <div class="slide" data-title="Competitive Advantage">
+        <div class="s-content">
+            <div class="s-tag">Why Bolt Wins</div>
+            <h2 class="s-h">Productivity <span class="grad">Multiplier</span></h2>
+            <p class="s-sub" style="margin-bottom: 1.5rem;">Desktop MCP, Terminal, Launcher, File browser, Clipboard
+                history and
+                more...</p>
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th style="text-align:left">Capability</th>
+                        <th>Others</th>
+                        <th>
+                            <div style="display:flex;align-items:center;justify-content:center;gap:0.4rem">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"
+                                    style="width: 20px; height: 20px;">
+                                    <circle cx="256" cy="256" r="240" fill="#1a1a2e" />
+                                    <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="#3B82F6"
+                                        stroke="#5c9cff" stroke-width="8" stroke-linejoin="round" />
+                                </svg>
+                                Bolt
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Multi-tier caching (RAG + Redis + LLM)</td>
+                        <td class="cx">✗</td>
+                        <td class="ck hl">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Cross-app priority engine (The One Thing™)</td>
+                        <td class="cp">Vendor-Specific Only</td>
+                        <td class="ck hl">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Proactive, Contextual, Always there</td>
+                        <td class="cx">✗</td>
+                        <td class="ck hl">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>PII Protection</td>
+                        <td class="cx">✗</td>
+                        <td class="ck hl">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Private / on-premise LLM</td>
+                        <td class="cp">Limited</td>
+                        <td class="ck hl">✓ Ollama · vLLM · Any that works for you</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-IdP SSO (Google + MS + Okta)</td>
+                        <td class="cp">Others also tick or one of theirs</td>
+                        <td class="ck hl">✓ Native + Any permutation</td>
+                    </tr>
+                    <tr>
+                        <td>Open MCP plugin ecosystem</td>
+                        <td class="ck">✓ Other also tick, right?</td>
+                        <td class="ck hl">✓ Open Standard</td>
+                    </tr>
+                    <tr>
+                        <td>Works without replacing any existing tool</td>
+                        <td class="cx">✗</td>
+                        <td class="ck hl">✓ Zero migration</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 14 — DEMO ═══ -->
+    <!--
+    <div class="slide dark-hero" data-title="Live Demo">
+        <div class="hbg"></div>
+        <div class="s-content" style="position:relative;z-index:1">
+            <div class="s-tag">Live Demo</div>
+            <h2 class="s-h">See Bolt in <span class="grad">60 seconds</span></h2>
+            <p class="s-sub">Watch the full connect flow: cross-system query, The One Thing™, MCP integrations —
+                all from a global hotkey.</p>
+            <div
+                style="margin-top:1.75rem;border-radius:14px;overflow:hidden;border:1px solid var(--b);box-shadow:0 0 80px rgba(99,120,255,.25)">
+                <video controls preload="metadata" style="width:100%;display:block;background:#000;max-height:45vh">
+                    <source src="https://sparcle.llc/images/bolt-demo.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <!-- ═══ SLIDE 15 — CTA ═══ -->
+    <div class="slide hero dark-hero" data-title="Get Started">
+        <div class="hbg"></div>
+        <div class="s-content"
+            style="position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;align-items:center">
+            <div class="s-tag" style="justify-content:center">Ready to Deploy</div>
+            <h1 class="s-h" style="font-size:clamp(2.5rem,5.5vw,4.5rem)">Your team deserves<br><span
+                    class="grad">answers, not tabs.</span></h1>
+            <p class="s-sub" style="text-align:center;margin:1.25rem auto;max-width:580px">Bolt deploys in your
+                existing cloud in under an hour. Connects to your IdP in minutes. No migration. No replacement.
+                No retraining. Your team is productive on day one.</p>
+            <div
+                style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.75rem;max-width:700px;width:100%">
+                <div class="card" style="text-align:center"><i data-lucide="clock"
+                        style="color:var(--g);width:22px;height:22px;margin-bottom:.4rem"></i>
+                    <h3 style="font-size:.9rem">&lt;1 Hour</h3>
+                    <p style="font-size:.78rem">To deploy</p>
+                </div>
+                <div class="card" style="text-align:center"><i data-lucide="plug-2"
+                        style="color:var(--g);width:22px;height:22px;margin-bottom:.4rem"></i>
+                    <h3 style="font-size:.9rem">Zero</h3>
+                    <p style="font-size:.78rem">Tools replaced</p>
+                </div>
+                <div class="card" style="text-align:center"><i data-lucide="trending-up"
+                        style="color:var(--g);width:22px;height:22px;margin-bottom:.4rem"></i>
+                    <h3 style="font-size:.9rem">Day 1</h3>
+                    <p style="font-size:.78rem">ROI visible</p>
+                </div>
+            </div>
+            <div class="cta-links">
+                <a href="mailto:bolt@sparcle.app" class="btn btn-p"><i data-lucide="mail"
+                        style="width:16px;height:16px"></i>Talk to Us</a>
+            </div>
+            <p style="margin-top:1.5rem;font-size:.75rem;color:var(--t3)">3 Patents Pending · Sparcle LLC ·
+                bolt@sparcle.app</p>
+        </div>
+    </div>
+
+    </div><!-- /viewport -->
+
+    <!-- CONTROLS -->
+    <div id="controls">
+        <button class="ctrl-btn" id="btn-prev" title="Previous (←)"><i data-lucide="chevron-left"
+                style="width:18px;height:18px"></i></button>
+        <button class="ctrl-btn" id="btn-next" title="Next (→)"><i data-lucide="chevron-right"
+                style="width:18px;height:18px"></i></button>
+        <div id="slide-counter">1 / 14</div>
+        <div id="slides-nav"></div>
+        <div id="progress-track">
+            <div id="progress-bar" style="width:7.14%"></div>
+        </div>
+        <div id="slide-title-bar"
+            style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 0 auto;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"
+                style="width: 16px; height: 16px;">
+                <circle cx="256" cy="256" r="240" fill="#1a1a2e" />
+                <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="#4285F4" />
+            </svg>
+            <span>Bolt — Enterprise AI Platform</span>
+        </div>
+        <button class="ctrl-btn" id="btn-fs" title="Fullscreen (F)"><i data-lucide="maximize-2"
+                style="width:16px;height:16px"></i></button>
+    </div>
+    </div><!-- /deck -->
+
+    <script>
+        try { lucide.createIcons(); } catch (e) { console.error("Lucide failed to load", e); }
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const total = slides.length;
+        let cur = 0;
+
+        const counter = document.getElementById('slide-counter');
+        const bar = document.getElementById('progress-bar');
+        const titleBar = document.getElementById('slide-title-bar');
+        const nav = document.getElementById('slides-nav');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        // Build nav dots
+        slides.forEach((_, i) => {
+            const d = document.createElement('button');
+            d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+            d.title = slides[i].dataset.title || '';
+            d.onclick = () => window.location.hash = i;
+            nav.appendChild(d);
+        });
+
+        function renderSlide(n) {
+            if (n < 0 || n >= total || n === cur) return;
+            const dir = n > cur ? 1 : -1;
+
+            slides[cur].classList.remove('active');
+            if (dir > 0) slides[cur].classList.add('out-left');
+            setTimeout(() => {
+                slides.forEach(s => s.classList.remove('out-left'));
+            }, 450);
+
+            cur = n;
+            slides.forEach((s, i) => {
+                s.classList.toggle('active', i === cur);
+            });
+            // Update UI
+            counter.textContent = `${cur + 1} / ${total}`;
+            bar.style.width = `${((cur + 1) / total) * 100}%`;
+            titleBar.textContent = slides[cur].dataset.title || '';
+            document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+            btnPrev.disabled = cur === 0;
+            btnNext.disabled = cur === total - 1;
+            // Re-trigger Lucide icons for newly activated slide
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        btnPrev.onclick = () => window.location.hash = cur - 1;
+        btnNext.onclick = () => window.location.hash = cur + 1;
+        btnPrev.disabled = true;
+
+        window.addEventListener('hashchange', () => {
+            const h = parseInt(window.location.hash.replace('#', '')) || 0;
+            if (h !== cur) renderSlide(h);
+        });
+
+        // Init hash
+        if (window.location.hash) {
+            const h = parseInt(window.location.hash.replace('#', '')) || 0;
+            if (h > 0 && h < total) renderSlide(h);
+        } else {
+            window.history.replaceState(null, '', '#0');
+        }
+
+        document.getElementById('btn-fs').onclick = () => {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        };
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); window.location.hash = Math.min(cur + 1, total - 1); }
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); window.location.hash = Math.max(cur - 1, 0); }
+            if (e.key === 'f' || e.key === 'F') document.getElementById('btn-fs').click();
+            if (e.key === 'Home') window.location.hash = 0;
+            if (e.key === 'End') window.location.hash = total - 1;
+        });
+
+        // Touch/swipe
+        let tx = 0;
+        document.getElementById('viewport').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+        document.getElementById('viewport').addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - tx;
+            if (Math.abs(dx) > 60) window.location.hash = dx < 0 ? Math.min(cur + 1, total - 1) : Math.max(cur - 1, 0);
+        }, { passive: true });
+
+        // ── AUTOPLAY ──────────────────────────────────────────────────────────
+        // Usage: bolt-slides.html?autoplay        → 10s per slide (default)
+        //        bolt-slides.html?autoplay=15      → 15s per slide
+        //        bolt-slides.html?autoplay=0       → disabled
+        const apParam = new URLSearchParams(location.search).get('autoplay');
+        const apEnabled = apParam !== null;
+        const apInterval = apParam && parseInt(apParam) > 0 ? parseInt(apParam) * 1000 : 10000;
+
+        // Countdown bar — thin line that drains across the bottom of the viewport
+        const apBar = document.createElement('div');
+        apBar.id = 'ap-bar';
+        apBar.style.cssText = [
+            'position:absolute', 'bottom:65px', 'left:0', 'height:3px',
+            'background:linear-gradient(90deg,#3B82F6,#a78bfa)',
+            'width:0', 'transition:none', 'z-index:999', 'pointer-events:none'
+        ].join(';');
+        document.getElementById('deck').appendChild(apBar);
+
+        // Play/pause button — injected into controls bar
+        const apBtn = document.createElement('button');
+        apBtn.className = 'ctrl-btn';
+        apBtn.title = 'Toggle autoplay (A)';
+        apBtn.innerHTML = '<i data-lucide="play" style="width:16px;height:16px"></i>';
+        apBtn.style.marginLeft = '0.25rem';
+        document.getElementById('controls').insertBefore(apBtn, document.getElementById('btn-prev').nextSibling);
+
+        let apTimer = null;
+        let apAnimFrame = null;
+        let apStart = null;
+        let apPlaying = false;
+
+        function apSetIcon(playing) {
+            apBtn.innerHTML = playing
+                ? '<i data-lucide="pause" style="width:16px;height:16px"></i>'
+                : '<i data-lucide="play" style="width:16px;height:16px"></i>';
+            try { lucide.createIcons(); } catch (e) {}
+        }
+
+        function apStartCountdown() {
+            apBarStop();
+            apStart = performance.now();
+            function tick(now) {
+                const elapsed = now - apStart;
+                const pct = Math.min(elapsed / apInterval * 100, 100);
+                apBar.style.width = pct + '%';
+                if (pct < 100) {
+                    apAnimFrame = requestAnimationFrame(tick);
+                }
+            }
+            apAnimFrame = requestAnimationFrame(tick);
+        }
+
+        function apBarStop() {
+            if (apAnimFrame) { cancelAnimationFrame(apAnimFrame); apAnimFrame = null; }
+            apBar.style.width = '0';
+        }
+
+        function apPlay() {
+            if (apPlaying) return;
+            apPlaying = true;
+            apSetIcon(true);
+            apBar.style.display = 'block';
+            apStartCountdown();
+            apTimer = setInterval(() => {
+                if (cur >= total - 1) {
+                    apPause(); // stop at last slide
+                } else {
+                    window.location.hash = cur + 1;
+                    apStartCountdown();
+                }
+            }, apInterval);
+        }
+
+        function apPause() {
+            if (!apPlaying) return;
+            apPlaying = false;
+            apSetIcon(false);
+            apBarStop();
+            apBar.style.display = 'none';
+            clearInterval(apTimer);
+            apTimer = null;
+        }
+
+        function apToggle() { apPlaying ? apPause() : apPlay(); }
+
+        apBtn.onclick = apToggle;
+
+        // Keyboard shortcut: A
+        document.addEventListener('keydown', e => {
+            if (e.key === 'a' || e.key === 'A') apToggle();
+        });
+
+        // Manual navigation pauses autoplay
+        btnPrev.addEventListener('click', apPause, true);
+        btnNext.addEventListener('click', apPause, true);
+
+        // Restart countdown bar when slide changes during autoplay
+        const _origRender = renderSlide;
+        // (bar restart is handled inside apPlay interval — no override needed)
+
+        // Auto-start if ?autoplay param present
+        if (apEnabled) {
+            // Small delay so page renders first
+            setTimeout(apPlay, 600);
+        }
+        // ── END AUTOPLAY ──────────────────────────────────────────────────────
+    </script>
+</body>
+
+</html>

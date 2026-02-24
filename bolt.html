@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bolt — The Enterprise AI Layer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg: #050810;
+            --bg2: #0a0f1e;
+            --surface: #0d1426;
+            --surface2: #111827;
+            --border: rgba(99, 120, 255, 0.15);
+            --accent: #6378ff;
+            --accent2: #a78bfa;
+            --green: #22d3a0;
+            --amber: #f59e0b;
+            --red: #f87171;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --glow: 0 0 60px rgba(99, 120, 255, 0.25);
+            --r: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(5, 8, 16, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #6378ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none
+        }
+
+        .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: .85rem;
+            font-weight: 500;
+            transition: color .2s
+        }
+
+        .nav-links a:hover {
+            color: var(--text)
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        section.full {
+            max-width: 100%;
+            padding: 6rem 0 4rem
+        }
+
+        .section-tag {
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .section-tag::before {
+            content: '';
+            width: 32px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent)
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -.03em
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.02em
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700
+        }
+
+        p {
+            line-height: 1.7;
+            color: var(--text2)
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6378ff 0%, #a78bfa 50%, #22d3a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 6rem 2rem
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 900px 700px at 50% 40%, rgba(99, 120, 255, .18) 0%, transparent 70%);
+            pointer-events: none
+        }
+
+        .hero-subtitle {
+            color: var(--text2);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 1.5rem auto
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap
+        }
+
+        .stat {
+            text-align: center
+        }
+
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .stat-label {
+            font-size: .8rem;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: .25rem
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem
+        }
+
+        .btn {
+            padding: .8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: .95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 24px rgba(99, 120, 255, .4)
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99, 120, 255, .5)
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        /* ── CARDS ── */
+        .card-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 3rem
+        }
+
+        .card-grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+        }
+
+        .card-grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 1.75rem;
+            transition: all .25s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99, 120, 255, .05), transparent);
+            opacity: 0;
+            transition: opacity .25s
+        }
+
+        .card:hover {
+            border-color: rgba(99, 120, 255, .4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(99, 120, 255, .15)
+        }
+
+        .card:hover::before {
+            opacity: 1
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem
+        }
+
+        .card h3 {
+            margin-bottom: .5rem
+        }
+
+        .card p {
+            font-size: .9rem
+        }
+
+        /* ── PROBLEM ── */
+        .pain-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem
+        }
+
+        .pain-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(248, 113, 113, .06);
+            border: 1px solid rgba(248, 113, 113, .2);
+            border-radius: 12px
+        }
+
+        .pain-item .icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: .1rem
+        }
+
+        .pain-item strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: .25rem
+        }
+
+        .pain-item p {
+            font-size: .9rem;
+            margin: 0
+        }
+
+        /* ── ARCH DIAGRAM ── */
+        #arch {
+            background: var(--bg2);
+            padding: 4rem 2rem
+        }
+
+        .arch-inner {
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        .mermaid-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 2rem;
+            margin-top: 2.5rem;
+            overflow-x: auto
+        }
+
+        .mermaid {
+            text-align: center
+        }
+
+        /* ── FEATURE PILLARS ── */
+        .pillar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .pillar:last-child {
+            border-bottom: none
+        }
+
+        .pillar.reverse {
+            direction: rtl
+        }
+
+        .pillar.reverse>* {
+            direction: ltr
+        }
+
+        .pillar-visual {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden
+        }
+
+        .pillar-visual::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(99, 120, 255, .2), transparent 70%);
+            pointer-events: none
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: 1rem
+        }
+
+        .badge {
+            padding: .3rem .75rem;
+            border-radius: 50px;
+            font-size: .75rem;
+            font-weight: 600;
+            background: rgba(99, 120, 255, .15);
+            color: var(--accent);
+            border: 1px solid rgba(99, 120, 255, .25)
+        }
+
+        .badge.green {
+            background: rgba(34, 211, 160, .12);
+            color: var(--green);
+            border-color: rgba(34, 211, 160, .25)
+        }
+
+        .badge.amber {
+            background: rgba(245, 158, 11, .12);
+            color: var(--amber);
+            border-color: rgba(245, 158, 11, .25)
+        }
+
+        /* ── PLATFORM GRID ── */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-top: 2.5rem
+        }
+
+        .platform-tile {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all .2s
+        }
+
+        .platform-tile:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(99, 120, 255, .15)
+        }
+
+        .platform-tile .icon {
+            font-size: 2.5rem;
+            margin-bottom: .75rem
+        }
+
+        .platform-tile p {
+            font-size: .8rem;
+            color: var(--text2);
+            margin-top: .25rem
+        }
+
+        /* ── COMPARE TABLE ── */
+        .compare-wrap {
+            overflow-x: auto;
+            margin-top: 2.5rem
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .9rem
+        }
+
+        thead tr {
+            background: rgba(99, 120, 255, .1)
+        }
+
+        th,
+        td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border)
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text);
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        td {
+            color: var(--text2)
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, .02)
+        }
+
+        .check {
+            color: var(--green);
+            font-weight: 700
+        }
+
+        .cross {
+            color: var(--text3)
+        }
+
+        .partial {
+            color: var(--amber)
+        }
+
+        td.highlight {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        /* ── SECURITY ── */
+        .layers {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            margin-top: 2rem
+        }
+
+        .layer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--surface);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            font-size: .9rem;
+            transition: all .2s
+        }
+
+        .layer:hover {
+            background: var(--surface2);
+            border-left-color: var(--green)
+        }
+
+        .layer-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .75rem;
+            color: var(--accent);
+            font-weight: 600;
+            min-width: 26px
+        }
+
+        .layer-label {
+            color: var(--text);
+            font-weight: 500;
+            min-width: 200px
+        }
+
+        .layer-desc {
+            color: var(--text2);
+            font-size: .85rem
+        }
+
+        /* ── MCP INTEGRATIONS ── */
+        .mcp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: .75rem;
+            margin-top: 2rem
+        }
+
+        .mcp-tile {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: .9rem;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .85rem;
+            font-weight: 500;
+            transition: border-color .2s
+        }
+
+        .mcp-tile:hover {
+            border-color: var(--accent)
+        }
+
+        .mcp-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0
+        }
+
+        /* ── VIDEO ── */
+        #demo {
+            background: var(--bg2);
+            padding: 5rem 2rem;
+            text-align: center
+        }
+
+        .demo-inner {
+            max-width: 960px;
+            margin: 0 auto
+        }
+
+        .video-wrap {
+            margin-top: 3rem;
+            border-radius: var(--r);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--glow);
+            position: relative
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000
+        }
+
+        /* ── CTA ── */
+        #cta {
+            background: radial-gradient(ellipse 1000px 500px at 50% 50%, rgba(99, 120, 255, .2), transparent);
+            text-align: center;
+            padding: 8rem 2rem
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text3);
+            font-size: .8rem
+        }
+
+        /* ── ANIMATIONS ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity .6s ease, transform .6s ease
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px) {
+            .pillar {
+                grid-template-columns: 1fr
+            }
+
+            .pillar.reverse {
+                direction: ltr
+            }
+
+            .hero-stats {
+                gap: 1.5rem
+            }
+
+            .nav-links {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"
+                style="width: 24px; height: 24px;">
+                <circle cx="256" cy="256" r="240" fill="#1a1a2e" />
+                <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="#4285F4" />
+            </svg>
+            Bolt
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#arch">Architecture</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#integrations">Integrations</a></li>
+            <li><a href="#platforms">Platforms</a></li>
+            <li><a href="#demo">Demo</a></li>
+        </ul>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section id="hero" class="full" style="max-width:100%">
+        <div class="hero-bg"></div>
+        <div style="margin-bottom: 2rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"
+                style="width: 80px; height: 80px;">
+                <circle cx="256" cy="256" r="240" fill="#1a1a2e" />
+                <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="#4285F4" stroke="#5c9cff"
+                    stroke-width="8" stroke-linejoin="round" />
+                <path d="M320 64L128 288H240L192 448L384 224H272L320 64Z" fill="url(#glow)" opacity="0.3" />
+                <defs>
+                    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+                        <stop offset="100%" style="stop-color:#4285F4;stop-opacity:0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="section-tag">Enterprise AI Assistant · Patent Pending</div>
+        <h1 class="gradient-text">Your Team's AI Layer.<br>Already Deployed.</h1>
+        <p class="hero-subtitle">
+            Bolt plugs into your existing Google Workspace, Microsoft 365, Slack, Jira, GitHub — any system — and gives
+            every employee a unified AI assistant. No replacement. No migration. No friction.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-num">70–90%</div>
+                <div class="stat-label">Cache Hit Rate</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">&lt;500ms</div>
+                <div class="stat-label">P99 Response</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">60–80%</div>
+                <div class="stat-label">LLM Cost Reduction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">40%</div>
+                <div class="stat-label">Time Recovered Daily</div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="#demo" class="btn btn-primary">▶ Watch Demo</a>
+            <a href="#arch" class="btn btn-outline">Explore Architecture</a>
+        </div>
+    </section>
+
+    <!-- ═══ PROBLEM ═══ -->
+    <section id="problem">
+        <div class="section-tag">The Problem</div>
+        <h2>Knowledge workers are <span class="gradient-text">drowning in friction</span></h2>
+        <p style="margin-top:1rem;max-width:650px">The modern enterprise runs on 9–11 applications. Every context switch
+            costs focus, time, and momentum — and the tools meant to help only add more tabs.</p>
+        <ul class="pain-list" style="margin-top:2.5rem">
+            <li class="pain-item">
+                <span class="icon">⏱️</span>
+                <div><strong>23-minute recovery time per context switch</strong>
+                    <p>Every time an employee switches from Jira to Slack to email to their calendar, their brain pays a
+                        tax. Multiplied across a team of 100, this is millions of lost hours per year.</p>
+                </div>
+            </li>
+            <li class="pain-item">
+                <span class="icon">🗂️</span>
+                <div><strong>Information is scattered across every system</strong>
+                    <p>Emails live in Gmail. Docs in Drive or SharePoint. Tasks in Jira or Linear. The answer exists —
+                        it's just in 5 different places, none of which talk to each other.</p>
+                </div>
+            </li>
+            <li class="pain-item">
+                <span class="icon">🔒</span>
+                <div><strong>Generic AI assistants aren't enterprise-safe</strong>
+                    <p>ChatGPT, Copilot, and Gemini require sending company data to external servers without
+                        fine-grained access control, audit trails, or privacy guarantees.</p>
+                </div>
+            </li>
+            <li class="pain-item">
+                <span class="icon">💸</span>
+                <div><strong>Every point solution requires budget, rollout, and change management</strong>
+                    <p>Glean, Guru, Notion AI — each demands a migration, a contract, and re-training employees. The ROI
+                        never arrives before the renewal notice does.</p>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ═══ SOLUTION INTRO ═══ -->
+    <section id="solution">
+        <div class="section-tag">The Solution</div>
+        <h2>Bolt bridges <span class="gradient-text">your existing ecosystem</span><br>without replacing a single tool
+        </h2>
+        <p style="margin-top:1rem;max-width:680px">Bolt is an enterprise AI layer that sits above your existing stack.
+            It indexes, understands, and acts across all your connected systems — and returns answers in milliseconds,
+            not minutes, through a non-disruptive overlay interface available on every device.</p>
+
+        <div class="card-grid card-grid-3" style="margin-top:3rem">
+            <div class="card fade-up">
+                <div class="card-icon">⚡</div>
+                <h3>Instant Answers</h3>
+                <p>Ask in plain English. Bolt pulls from email, calendar, Jira, Slack, Drive, GitHub, and more —
+                    simultaneously — and synthesizes a single answer. Sub-500ms P99.</p>
+            </div>
+            <div class="card fade-up">
+                <div class="card-icon">🎯</div>
+                <h3>The One Thing™</h3>
+                <p>Patented priority engine cross-ranks items across all systems using urgency, impact, organizational
+                    hierarchy, and action clarity — and surfaces the single most important item right now.</p>
+            </div>
+            <div class="card fade-up">
+                <div class="card-icon">👁️</div>
+                <h3>Non-Disruptive Overlay</h3>
+                <p>Press <kbd
+                        style="background:var(--surface2);padding:.1rem .4rem;border-radius:4px;font-family:monospace">Cmd+Shift+K</kbd>
+                    anywhere. Bolt appears over your focused app, answers your question, and silently retreats when you
+                    return to work.</p>
+            </div>
+            <div class="card fade-up">
+                <div class="card-icon">🔐</div>
+                <h3>Enterprise-Grade Security</h3>
+                <p>8-layer security pipeline: SSO/OIDC, PII pseudonymization, RBAC, audit logs, rate limiting, secrets
+                    management. Your data never leaves your auth boundary.</p>
+            </div>
+            <div class="card fade-up">
+                <div class="card-icon">🧩</div>
+                <h3>Bring Your Own LLM</h3>
+                <p>Hot-swap between OpenAI, Anthropic, Google Gemini, Ollama, vLLM, NVIDIA NIM, or any OpenAI-compatible
+                    endpoint. Go private and cut costs by 60–80%.</p>
+            </div>
+            <div class="card fade-up">
+                <div class="card-icon">🌐</div>
+                <h3>Every Platform</h3>
+                <p>Web, Mac desktop, Windows, Linux, iOS, Android, browser extension (Chrome/Firefox). The same
+                    experience, everywhere your team works.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ ARCHITECTURE ═══ -->
+    <div id="arch" style="background:var(--bg2);padding:5rem 2rem">
+        <div class="arch-inner" style="max-width:1100px;margin:0 auto">
+            <div class="section-tag">System Architecture</div>
+            <h2>Built for scale. <span class="gradient-text">Designed for trust.</span></h2>
+            <p style="margin-top:1rem;max-width:650px">Bolt's multi-tier caching architecture achieves enterprise
+                reliability without vendor lock-in. Every layer is pluggable, auditable, and secure.</p>
+            <div class="mermaid-wrap">
+                <div class="mermaid">
+                    graph TB
+                    subgraph Clients["Client Layer — Every Platform"]
+                    W[Web Browser]
+                    E[Browser Extension]
+                    D[Desktop App<br />Mac · Win · Linux]
+                    M[Mobile App<br />iOS · Android]
+                    end
+
+                    subgraph BoltAPI["Bolt API — Core Engine"]
+                    AUTH[Auth / SSO<br />Google · Microsoft<br />Okta · Auth0 · OIDC]
+                    PII[PII Shield<br />Presidio ML<br />HMAC Pseudonymization]
+                    AGENT[AI Agent<br />Tool Orchestration<br />Parallel Execution]
+                    CACHE["3-Tier Cache<br />RAG Vector • Redis • LLM<br />&lt;50ms / &lt;150ms / &lt;500ms"]
+                    PRIO[Priority Engine<br />One Thing™<br />US Patent Pending]
+                    end
+
+                    subgraph LLMs["LLM Layer — Pluggable"]
+                    GPT[OpenAI GPT-4o]
+                    ANT[Anthropic Claude]
+                    GEM[Google Gemini]
+                    PRIV[Private / On-Prem<br />Ollama · vLLM · NVIDIA]
+                    end
+
+                    subgraph DataSources["Connected Data Sources"]
+                    GW[Google Workspace<br />Gmail · Drive · Calendar]
+                    M365[Microsoft 365<br />Outlook · Teams · SharePoint]
+                    DEV[Dev Tools<br />GitHub · Jira · Linear]
+                    SLACK[Slack · Zoom]
+                    BD2[bolt-data2<br />Enterprise Data Lake<br />SQL · Vector · Search]
+                    end
+
+                    subgraph MCP["MCP Server Ecosystem"]
+                    MCPS1[Tavily Search]
+                    MCPS2[GitHub MCP]
+                    MCPS3[Google Maps]
+                    MCPS4[Custom Enterprise MCPs]
+                    end
+
+                    Clients --> AUTH
+                    AUTH --> PII
+                    PII --> AGENT
+                    AGENT --> CACHE
+                    CACHE --> LLMs
+                    AGENT --> DataSources
+                    AGENT --> MCP
+                    AGENT --> PRIO
+
+                    style BoltAPI fill:#0d1426,stroke:#6378ff,color:#f1f5f9
+                    style LLMs fill:#0d1426,stroke:#22d3a0,color:#f1f5f9
+                    style DataSources fill:#0d1426,stroke:#a78bfa,color:#f1f5f9
+                    style MCP fill:#0d1426,stroke:#f59e0b,color:#f1f5f9
+                    style Clients fill:#0d1426,stroke:#64748b,color:#f1f5f9
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FEATURE PILLARS ═══ -->
+    <section id="features">
+        <!-- AUTH / SSO -->
+        <div class="section-tag">Auth &amp; Privacy</div>
+        <h2>Enterprise SSO &amp; <span class="gradient-text">Privacy by Default</span></h2>
+
+        <div class="pillar" style="margin-top:2.5rem">
+            <div>
+                <h3>Single Sign-On for every IdP</h3>
+                <p style="margin-top:.75rem">Bolt speaks OIDC, SAML, and OAuth 2.1 natively. One config switch selects
+                    your identity provider — no custom code, no professional services.</p>
+                <div class="badge-list" style="margin-top:1.25rem">
+                    <span class="badge">Google Workspace</span>
+                    <span class="badge">Microsoft Azure AD</span>
+                    <span class="badge">Okta</span>
+                    <span class="badge">Auth0</span>
+                    <span class="badge">Generic OIDC</span>
+                    <span class="badge">Zoho</span>
+                </div>
+                <div class="badge-list" style="margin-top:.5rem">
+                    <span class="badge green">JWT Sessions</span>
+                    <span class="badge green">Refresh Tokens</span>
+                    <span class="badge green">PKCE OAuth 2.1</span>
+                    <span class="badge green">Incremental Consent</span>
+                </div>
+            </div>
+            <div class="pillar-visual">
+                <p style="font-size:.8rem;color:var(--text3);margin-bottom:1rem;font-family:'JetBrains Mono',monospace">
+                    config/base.yaml</p>
+                <pre
+                    style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent2);line-height:1.7">platform:
+  identity:
+    provider: <span style="color:var(--green)">"microsoft"</span>
+    client_id: <span style="color:var(--green)">"${AZURE_CLIENT_ID}"</span>
+    tenant_id: <span style="color:var(--green)">"${TENANT_ID}"</span>
+    redirect_uri: <span style="color:var(--green)">"https://bolt.corp.com/callback"</span>
+
+  <span style="color:var(--text3)"># or swap to Google in 1 line:</span>
+    provider: <span style="color:var(--green)">"google"</span></pre>
+            </div>
+        </div>
+
+        <!-- PII PRIVACY -->
+        <div class="pillar reverse" style="margin-top:0">
+            <div>
+                <h3>Edge-Anonymization — Zero PII in the Cloud</h3>
+                <p style="margin-top:.75rem">Before any data reaches the AI layer, Bolt's proprietary edge-anonymization
+                    engine automatically detects and obfuscates sensitive PII (names, emails, SSNs). Our secure,
+                    session-bound tunnel ensures the AI reasons purely on anonymous tokens, while responses are securely
+                    restored within your enterprise boundary. No PII in logs, ever.</p>
+                <div class="badge-list" style="margin-top:1.25rem">
+                    <span class="badge green">HIPAA-ready</span>
+                    <span class="badge green">SOC 2 aligned</span>
+                    <span class="badge green">GDPR friendly</span>
+                    <span class="badge green">Zero PII in LLM prompts</span>
+                    <span class="badge green">Complete audit trail</span>
+                </div>
+            </div>
+            <div class="pillar-visual">
+                <p style="font-size:.75rem;color:var(--text3);margin-bottom:.75rem">PII Pipeline Flow</p>
+                <div
+                    style="display:flex;flex-direction:column;gap:.5rem;font-size:.82rem;font-family:'JetBrains Mono',monospace">
+                    <div
+                        style="padding:.6rem;background:rgba(248,113,113,.08);border-radius:6px;border-left:2px solid var(--red);color:var(--red)">
+                        Input: "Email John Smith at john@acme.com"</div>
+                    <div style="text-align:center;color:var(--text3)">↓ Proprietary Edge-Anonymization</div>
+                    <div
+                        style="padding:.6rem;background:rgba(245,158,11,.08);border-radius:6px;border-left:2px solid var(--amber);color:var(--amber)">
+                        Pseudonymized: "Email &lt;PERSON_3a7f&gt; at &lt;EMAIL_9c2b&gt;"</div>
+                    <div style="text-align:center;color:var(--text3)">↓ LLM Processes</div>
+                    <div
+                        style="padding:.6rem;background:rgba(34,211,160,.08);border-radius:6px;border-left:2px solid var(--green);color:var(--green)">
+                        Restored: "Email John Smith at john@acme.com"</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ LLM PLUGGABILITY ═══ -->
+    <section id="llm">
+        <div class="section-tag">LLM Pluggability</div>
+        <h2>Bring Your Own AI. <span class="gradient-text">Or ours. Or anyone's.</span></h2>
+        <p style="margin-top:1rem;max-width:620px">Bolt's LLM layer is fully hot-swappable. Change your provider in one
+            config line. Run on-premise for complete data sovereignty and 60–80% cost reduction.</p>
+        <div class="card-grid card-grid-3" style="margin-top:2.5rem">
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <h3>OpenAI</h3>
+                <p>GPT-4o, GPT-4-turbo, GPT-3.5 — with full function calling and streaming support.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <h3>Anthropic Claude</h3>
+                <p>Claude 3.5 Sonnet, Claude 3 Opus. Best-in-class for long-context reasoning.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">✨</div>
+                <h3>Google Gemini</h3>
+                <p>Gemini 2.0 Flash, Pro. Native multimodal for documents and images.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🦙</div>
+                <h3>Ollama (Private)</h3>
+                <p>Run Llama 3.3, Mistral, Phi-4 on your own hardware. Zero data egress.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚗️</div>
+                <h3>vLLM / NVIDIA NIM</h3>
+                <p>Deploy any HuggingFace model with GPU acceleration. Enterprise-grade inference.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔌</div>
+                <h3>Any OpenAI-Compatible</h3>
+                <p>Custom base URL support — Groq, Together AI, Perplexity, local LM Studio.</p>
+            </div>
+        </div>
+        <div
+            style="margin-top:2rem;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px">
+            <p style="font-size:.85rem"><strong style="color:var(--green)">💡 3-Tier Caching:</strong> <span>Vector RAG
+                    Cache (&lt;50ms) → Redis Semantic Cache (&lt;150ms) → LLM (&lt;500ms). 70–90% of queries never reach
+                    the LLM. Costs drop dramatically.</span></p>
+        </div>
+    </section>
+
+    <!-- ═══ bolt-data2 ═══ -->
+    <section id="data2">
+        <div class="section-tag">Enterprise Data Lake</div>
+        <h2>bolt-data2 — <span class="gradient-text">The Knowledge Backbone</span></h2>
+        <p style="margin-top:1rem;max-width:650px">bolt-data2 is Bolt's enterprise data layer: a unified, queryable
+            store that indexes your organization's institutional knowledge across all sources. It powers both real-time
+            agent queries and background context pre-loading.</p>
+        <div class="card-grid card-grid-2" style="margin-top:2.5rem">
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Unified Data Index</h3>
+                <p>Emails, calendar events, documents, Slack threads, Jira tickets, GitHub PRs — all normalized into a
+                    searchable, rankable corpus.</p>
+                <div class="badge-list"><span class="badge green">SQL</span><span class="badge green">Vector
+                        Search</span><span class="badge green">Full-Text</span></div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔄</div>
+                <h3>Real-Time Sync</h3>
+                <p>Background jobs incrementally sync changes across connected providers. Cache TTLs are per-data-type:
+                    personal (short), team (medium), global (long).</p>
+                <div class="badge-list"><span class="badge">Delta Sync</span><span class="badge">Webhook
+                        Push</span><span class="badge">Scheduled Pull</span></div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3>People Graph</h3>
+                <p>Builds an org-aware people graph from your IdP. Powers the One Thing™ priority engine's
+                    organizational hierarchy inference — without a pre-built org chart.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🛡️</div>
+                <h3>Access-Scoped by Identity</h3>
+                <p>bolt-data2 enforces per-user data access. Users only see data accessible under their own OAuth token.
+                    No cross-user data leakage. Full audit trail.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SECURITY ═══ -->
+    <section id="security">
+        <div class="section-tag">Security</div>
+        <h2>8-Layer Security Pipeline — <span class="gradient-text">Patent Pending</span></h2>
+        <p style="margin-top:1rem;max-width:620px">Every request passes through a sequential security pipeline before
+            reaching the AI. No shortcuts. No pass-throughs.</p>
+        <div class="layers">
+            <div class="layer"><span class="layer-num">L1</span><span class="layer-label">Identity
+                    Validation</span><span class="layer-desc">JWT · SAML · OIDC — session verified on every
+                    request</span></div>
+            <div class="layer"><span class="layer-num">L2</span><span class="layer-label">Advanced Data
+                    Scrubbing</span><span class="layer-desc">Zero PII in LLM prompts or audit logs — all data anonymized
+                    at the edge</span></div>
+            <div class="layer"><span class="layer-num">L3</span><span class="layer-label">Policy Guardrails</span><span
+                    class="layer-desc">RBAC · Content filtering · Tool access policies</span></div>
+            <div class="layer"><span class="layer-num">L4</span><span class="layer-label">Distributed Rate
+                    Limiting</span><span class="layer-desc">Redis-backed per-user and per-org limits</span></div>
+            <div class="layer"><span class="layer-num">L5</span><span class="layer-label">Multi-Tier Caching</span><span
+                    class="layer-desc">RAG → Redis → LLM — only cold queries reach the model</span></div>
+            <div class="layer"><span class="layer-num">L6</span><span class="layer-label">Audit Logging</span><span
+                    class="layer-desc">Immutable audit trail — every query, tool call, data access</span></div>
+            <div class="layer"><span class="layer-num">L7</span><span class="layer-label">No Client Token
+                    Storage</span><span class="layer-desc">Ephemeral, encrypted session tunnels — no credentials persist
+                    on-device</span></div>
+            <div class="layer"><span class="layer-num">L8</span><span class="layer-label">PII Restoration</span><span
+                    class="layer-desc">Reverse-map pseudonymized tokens before responding to user</span></div>
+        </div>
+    </section>
+
+    <!-- ═══ INTEGRATIONS / MCPs ═══ -->
+    <section id="integrations">
+        <div class="section-tag">Integrations &amp; MCPs</div>
+        <h2>Connect <span class="gradient-text">everything</span> your team uses</h2>
+        <p style="margin-top:1rem;max-width:680px">Bolt supports the Model Context Protocol (MCP) — the emerging
+            standard for AI tool integration. Add any MCP server, configure OAuth 2.1 or API keys per-user, and your
+            agent instantly gains new capabilities.</p>
+        <div class="mcp-grid">
+            <div class="mcp-tile"><span class="mcp-dot"></span>Gmail</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Google Drive</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Google Calendar</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Outlook</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Microsoft Teams</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>SharePoint</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Slack</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>GitHub</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Jira</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Linear</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Notion</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Confluence</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Tavily Search</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Google Maps</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Custom SQL DB</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Salesforce</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Zendesk</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>HubSpot</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>AWS S3</div>
+            <div class="mcp-tile"><span class="mcp-dot"></span>Any MCP Server +</div>
+        </div>
+        <div style="margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem">
+            <div class="card">
+                <div class="card-icon">🔌</div>
+                <h3>Plugins &amp; Extensions</h3>
+                <p>Drop in any module — custom data sources, workflow automations, UI components — without touching the
+                    core.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎭</div>
+                <h3>Skills</h3>
+                <p>Pre-built agent skills for common enterprise tasks: send email, schedule meeting, file Jira ticket,
+                    summarize thread.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🛠️</div>
+                <h3>Custom MCP Servers</h3>
+                <p>Point Bolt at any MCP-compliant server. Supports OAuth 2.1 PKCE, API key, identity passthrough, and
+                    public endpoints.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ PLATFORMS ═══ -->
+    <section id="platforms">
+        <div class="section-tag">Platforms</div>
+        <h2>One assistant. <span class="gradient-text">Every surface.</span></h2>
+        <p style="margin-top:1rem;max-width:620px">Bolt is a PWA at its core — install once, run everywhere. Native
+            desktop apps wrap the same experience for OS-level integration (global hotkey, system tray, native
+            notifications).</p>
+        <div class="platform-grid">
+            <div class="platform-tile">
+                <div class="icon">🖥️</div><strong>macOS</strong>
+                <p>Native app · Global hotkey · Menu bar</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🪟</div><strong>Windows</strong>
+                <p>Native app · System tray · Auto-start</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🐧</div><strong>Linux</strong>
+                <p>AppImage · Deb · RPM</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🌐</div><strong>Web Browser</strong>
+                <p>Chrome, Firefox, Safari, Edge</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🧩</div><strong>Extension</strong>
+                <p>Chrome &amp; Firefox · Works on any site</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">📱</div><strong>iOS</strong>
+                <p>Native React Native app · Deep links</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🤖</div><strong>Android</strong>
+                <p>Native React Native app</p>
+            </div>
+            <div class="platform-tile">
+                <div class="icon">🔑</div><strong>Sidecar / Self-Hosted</strong>
+                <p>Ship bolt-api as a bundled sidecar binary</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ COMPETITIVE MOAT ═══ -->
+    <section id="compare">
+        <div class="section-tag">Competitive Advantage</div>
+        <h2>Nobody else has <span class="gradient-text">this combination</span></h2>
+        <div class="compare-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Microsoft Copilot</th>
+                        <th>Google Gemini</th>
+                        <th>Glean</th>
+                        <th>⚡ Bolt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Multi-tier caching (RAG + Redis + LLM)</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Cross-app priority engine (The One Thing™)</td>
+                        <td class="partial">MS only</td>
+                        <td class="partial">Google only</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Non-disruptive overlay UI</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓ Patent Pending</td>
+                    </tr>
+                    <tr>
+                        <td>HMAC PII pseudonymization</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Private / on-premise LLM support</td>
+                        <td class="partial">Limited</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓ Ollama · vLLM · NVIDIA</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-IdP SSO (Google + Microsoft + Okta)</td>
+                        <td class="partial">MS only</td>
+                        <td class="partial">Google only</td>
+                        <td class="check">✓</td>
+                        <td class="check highlight">✓</td>
+                    </tr>
+                    <tr>
+                        <td>MCP plugin ecosystem</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓ Open Standard</td>
+                    </tr>
+                    <tr>
+                        <td>Sub-500ms P99 response</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check highlight">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Works alongside existing tools</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="partial">Partial</td>
+                        <td class="check highlight">✓ Zero replacement</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ═══ DEMO VIDEO ═══ -->
+    <div id="demo" style="background:var(--bg2);padding:6rem 2rem;text-align:center">
+        <div style="max-width:960px;margin:0 auto">
+            <div class="section-tag" style="justify-content:center">Live Demo</div>
+            <h2>See it in <span class="gradient-text">60 seconds</span></h2>
+            <p style="margin-top:1rem;color:var(--text2)">Watch Bolt answer a complex cross-system query, surface The
+                One Thing™, and reconnect MCP integrations — all from a global hotkey.</p>
+            <div class="video-wrap" style="margin-top:3rem">
+                <video controls preload="metadata" poster="">
+                    <source src="https://sparcle.llc/images/bolt-demo.mp4" type="video/mp4" />
+                    Your browser does not support the video element.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ USE CASES ═══ -->
+    <section id="usecases">
+        <div class="section-tag">Use Cases</div>
+        <h2>Real work. <span class="gradient-text">Real time saved.</span></h2>
+        <div class="card-grid card-grid-2" style="margin-top:2.5rem">
+            <div class="card">
+                <div class="card-icon">📧</div>
+                <h3>Morning Brief</h3>
+                <p>"What do I need to handle before my 9am?" — Bolt reads your email, calendar, Jira, and Slack, then
+                    surfaces a prioritized action list. In 3 seconds.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏃</div>
+                <h3>Meeting Prep</h3>
+                <p>"Summarize everything relevant to the Acme deal this week." — Bolt pulls emails, tasks, and notes
+                    from all systems and presents a clean brief.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🐛</div>
+                <h3>Incident Response</h3>
+                <p>"What's the status of the production outage?" — Bolt checks PagerDuty, Jira, Slack #incidents, and
+                    GitHub in parallel. One answer, instantly.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3>Draft &amp; Send</h3>
+                <p>"Draft a follow-up to John's email about the Q1 contract and send it." — Bolt reads context, drafts
+                    the email, and sends via your Gmail or Outlook with your confirmation.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Cross-System Search</h3>
+                <p>"Find the latest NDA we sent to TechCorp." — Searches Drive, SharePoint, Gmail attachments, and
+                    Notion simultaneously. Sources cited.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧑‍💻</div>
+                <h3>Code Context</h3>
+                <p>"What's blocking the auth PR?" — Bolt checks GitHub PR status, linked Jira ticket, and Slack thread.
+                    Full context in one place.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <div id="cta"
+        style="background:radial-gradient(ellipse 1000px 500px at 50% 50%,rgba(99,120,255,.18),transparent);padding:8rem 2rem;text-align:center">
+        <div class="section-tag" style="justify-content:center">Get Started</div>
+        <h2 style="font-size:clamp(2rem,5vw,4rem);font-weight:900">Your team deserves<br /><span
+                class="gradient-text">answers, not tabs.</span></h2>
+        <p style="margin:1.5rem auto;max-width:520px;color:var(--text2)">Bolt deploys in your existing cloud in under an
+            hour. No migration. No retraining. No replacement of any tool your team already uses.</p>
+        <div class="btn-group" style="margin-top:2rem">
+            <a href="https://sparcle.app" target="_blank" class="btn btn-primary">🚀 Try Bolt Free</a>
+            <a href="mailto:bolt@sparcle.app" class="btn btn-outline">📬 Talk to Sales</a>
+        </div>
+        <p style="margin-top:2rem;font-size:.8rem;color:var(--text3)">3 patents pending · Sparcle LLC · Confidential</p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Sparcle LLC · <a href="https://sparcle.app"
+                style="color:var(--accent);text-decoration:none">sparcle.app</a> · bolt@sparcle.app · All architecture
+            descriptions involve patent-pending technology.</p>
+    </footer>
+
+    <script>
+        // Mermaid init
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#6378ff',
+                primaryTextColor: '#f1f5f9',
+                primaryBorderColor: '#6378ff',
+                lineColor: '#6378ff',
+                secondaryColor: '#0d1426',
+                tertiaryColor: '#111827',
+                background: '#050810',
+                mainBkg: '#0d1426',
+                nodeBorder: '#6378ff',
+                clusterBkg: '#0a0f1e',
+                titleColor: '#f1f5f9',
+                edgeLabelBackground: '#050810',
+                fontSize: '13px'
+            }
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+            { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+        );
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Stagger card anims
+        document.querySelectorAll('.card-grid').forEach(grid => {
+            grid.querySelectorAll('.card').forEach((card, i) => {
+                card.style.transitionDelay = `${i * 80}ms`;
+            });
+        });
+    </script>
+</body>
+
+</html>
