@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://sparcle.llc/sitemap.xml
+
+# Disallow non-content directories
+Disallow: /js/
+Disallow: /css/

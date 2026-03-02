@@ -77,4 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // Global: when any video plays, pause all others
+    document.addEventListener('play', (e) => {
+        document.querySelectorAll('video').forEach(v => {
+            if (v !== e.target) v.pause();
+        });
+    }, true);
 });
