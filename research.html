@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- Anti-flash: apply saved theme before first paint -->
+    <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="The Hidden Cost of Workplace Fragmentation — Research-backed analysis of context switching, attention loss, and the $450B productivity crisis. By the Bolt Research Team.">
@@ -544,30 +546,7 @@
 
 <body>
 
-    <!-- ========================================
-         NAVIGATION
-         ======================================== -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-logo">
-            <a href="/" style="display: flex; align-items: center; gap: 0.75rem;">
-                <img src="images/sparkle-icon.svg" alt="" style="width: 32px; height: 32px;">
-                <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-heading);">Sparcle</span>
-            </a>
-        </div>
-
-        <ul class="nav-menu">
-            <li><a href="/#problem" class="nav-link">The Crisis</a></li>
-            <li><a href="/#solution" class="nav-link">Our Solution</a></li>
-            <li><a href="/#products" class="nav-link">Products</a></li>
-            <li><a href="/#proof" class="nav-link">Why Sparcle</a></li>
-            <li><a href="/research.html" class="nav-link" style="color: var(--blue-400);">Research</a></li>
-            <li><a href="/#contact" class="nav-link">Contact</a></li>
-        </ul>
-
-        <div class="nav-controls">
-            <a href="/#contact" class="btn btn-primary btn-sm">Let's Talk</a>
-        </div>
-    </nav>
+    <!-- nav injected by js/shared-nav.js -->
 
     <!-- ========================================
          HERO
@@ -1446,53 +1425,9 @@
         </div>
     </section>
 
-    <!-- ========================================
-         FOOTER
-         ======================================== -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                        <img src="images/sparkle-icon.svg" alt="" style="height: 32px;">
-                        <span style="font-size: 1.25rem; font-weight: 700;">Sparcle</span>
-                    </div>
-                    <p>Building unified intelligence for the modern enterprise.</p>
-                </div>
+    <!-- footer injected by js/shared-nav.js -->
 
-                <div class="footer-col">
-                    <h5>Products</h5>
-                    <ul>
-                        <li><a href="/#products">Bolt Enterprise</a></li>
-                        <li><a href="https://sparcle.app/" target="_blank">Sparcle.app</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h5>Resources</h5>
-                    <ul>
-                        <li><a href="/research.html">Research</a></li>
-                        <li><a href="/media/Bolt_Strategic_Vision.pdf" target="_blank">Strategic Vision</a></li>
-                        <li><a href="https://sparcle.app/whitepaper-print.html" target="_blank">Full Whitepaper</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
-                    <h5>Company</h5>
-                    <ul>
-                        <li><a href="mailto:bolt@sparcle.app">Contact</a></li>
-                        <li><a href="/#problem">The Crisis</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <span>© 2026 Sparcle, LLC. All rights reserved.</span>
-                <span class="footer-legal">Patents Pending: US 63/951,662 · 63/952,801 · 63/952,804</span>
-            </div>
-        </div>
-    </footer>
-
+    <script src="js/shared-nav.js"></script>
     <script src="js/main.js"></script>
 </body>
 

@@ -249,6 +249,12 @@ section {
     background: var(--brand-primary-light);
 }
 
+/* Active page indicator (set by shared-nav.js on current page) */
+.nav-link.nav-active {
+    color: var(--brand-primary);
+    background: var(--brand-primary-light);
+}
+
 .nav-controls {
     display: flex;
     align-items: center;

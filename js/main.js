@@ -61,35 +61,33 @@ function updateThemeIcon(theme, sunIcon, moonIcon) {
 
 function initNavigation() {
     const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
 
-    // Scroll effect
-    let lastScroll = 0;
+    // Scroll effect (shared-nav.js also sets this but passive listeners are fine to stack)
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
+        navbar.classList.toggle('scrolled', currentScroll > 10);
+    }, { passive: true });
 
-        if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+    // Mobile menu toggle — skip if shared-nav.js already wired this up
+    if (navToggle && navMenu && !navToggle.dataset.navInit) {
+        navToggle.dataset.navInit = 'true';
 
-        lastScroll = currentScroll;
-    });
-
-    // Mobile menu toggle
-    if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            navToggle.classList.toggle('active');
+            const open = navMenu.classList.toggle('open');
+            navToggle.classList.toggle('open', open);
+            navToggle.setAttribute('aria-expanded', String(open));
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+                navMenu.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
             }
         });
 
@@ -97,8 +95,9 @@ function initNavigation() {
         const navLinks = navMenu.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+                navMenu.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
             });
         });
     }
