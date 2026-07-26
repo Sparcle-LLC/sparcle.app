@@ -82,6 +82,9 @@
 /install-cli.sh
   Content-Type: text/plain; charset=utf-8
 
+/install-cli.ps1
+  Content-Type: text/plain; charset=utf-8
+
 /personal.sh
   Content-Type: text/plain; charset=utf-8
 
