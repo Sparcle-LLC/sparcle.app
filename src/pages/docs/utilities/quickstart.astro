@@ -254,7 +254,7 @@ presentation:
   <main class="qs-page">
     <section class="qs-hero">
       <div class="container">
-        <p class="qs-eyebrow"><a href="/docs/utilities">&larr; Apps</a></p>
+        <p class="qs-eyebrow"><a href="/docs/utilities/">&larr; Apps</a></p>
         <h1>Quickstart.</h1>
         <p class="qs-lede">
           Three examples, escalating in complexity. Each one is a complete,
@@ -264,8 +264,8 @@ presentation:
           and <code>emit</code>, plus list and card presentation.
         </p>
         <ul class="qs-pills">
-          <li><a href="/docs/utilities/spec">Full spec (v1) &rarr;</a></li>
-          <li><a href="/docs/utilities/gallery">Sample gallery &rarr;</a></li>
+          <li><a href="/docs/utilities/spec/">Full spec (v1) &rarr;</a></li>
+          <li><a href="/docs/utilities/gallery/">Sample gallery &rarr;</a></li>
         </ul>
       </div>
     </section>
@@ -321,7 +321,7 @@ presentation:
           can reference it inline. Use <code>match</code> only when you need
           pattern-based dispatch across multiple sub-flows; it takes a list of
           <code>regex:</code> or <code>text:</code> branches. See
-          <a href="/docs/utilities/spec#5-scopes">Scopes</a> for the full grammar.
+          <a href="/docs/utilities/spec/#5-scopes">Scopes</a> for the full grammar.
         </p>
 
         <p>
@@ -330,7 +330,7 @@ presentation:
           is <code>kind: http</code>, method <code>GET</code>, against a public
           endpoint. The <code>out: r</code> line names this call's output so the
           next step can reference it. See
-          <a href="/docs/utilities/spec#6-flow-dag">Flow DAG</a> for
+          <a href="/docs/utilities/spec/#6-flow-dag">Flow DAG</a> for
           <code>parallel</code>, <code>merge</code>, and <code>transform</code>.
         </p>
 
@@ -342,7 +342,7 @@ presentation:
           that are arrays or nested objects, add a <code>path:</code> JSON
           pointer (e.g. <code>path: /events</code>) to point at the array to
           emit. The full binding grammar is in
-          <a href="/docs/utilities/spec#6-5-emit-produce-the-final-row-set">Emit</a>.
+          <a href="/docs/utilities/spec/#6-5-emit-produce-the-final-row-set">Emit</a>.
         </p>
 
         <p>
@@ -351,7 +351,7 @@ presentation:
           as a list. <code>title_field</code> and <code>subtitle_field</code>
           name response fields to display per row. <code>empty_state</code> is
           what the launcher shows when the chip has no input yet. The
-          <a href="/docs/utilities/spec#11-presentation">Presentation</a>
+          <a href="/docs/utilities/spec/#11-presentation">Presentation</a>
           section covers the full list.
         </p>
 
@@ -393,16 +393,16 @@ presentation:
         <p>
           The runtime patterns map cleanly to the spec. The two leading calls
           are textbook sequential dependency from
-          <a href="/docs/utilities/spec#6-flow-dag">Flow DAG (section 6)</a>,
+          <a href="/docs/utilities/spec/#6-flow-dag">Flow DAG (section 6)</a>,
           with the geocoder's <code>{`{{geo.results.0.country_code}}`}</code>
           feeding the next URL. The fan-out uses <code>parallel</code> from
-          <a href="/docs/utilities/spec#6-2-parallel--run-nested-flows-concurrently">section 6.2</a>;
+          <a href="/docs/utilities/spec/#6-2-parallel--run-nested-flows-concurrently">section 6.2</a>;
           the two <code>transform</code> nodes use jq exactly as
-          <a href="/docs/utilities/spec#6-4-transform--jq-one-liner-over-the-template-context">section 6.4</a>
+          <a href="/docs/utilities/spec/#6-4-transform--jq-one-liner-over-the-template-context">section 6.4</a>
           describes, with <code>// null</code> fallbacks so a missing upstream
           field never crashes the row. The right rail is a
           <code>kind: card</code> in <code>selected_row</code> mode per
-          <a href="/docs/utilities/spec#11-presentation">section 11</a>;
+          <a href="/docs/utilities/spec/#11-presentation">section 11</a>;
           <code>row_key_field: cca3</code> stabilizes selection across
           re-renders.
         </p>
@@ -530,11 +530,11 @@ presentation:
       <div class="container">
         <h2>Where to go next</h2>
         <ul class="qs-bullets">
-          <li><a href="/docs/utilities/gallery">Sample gallery.</a> Real-world manifests for Jira, Salesforce, Slack, Notion, Linear, GitHub, and more. Fork one as a starting point for your own.</li>
-          <li><a href="/docs/utilities/spec">Full manifest spec (v1).</a> Every field, every step kind, every validation rule. The source of truth.</li>
-          <li><a href="/docs/utilities/spec#5-scopes">Scopes.</a> Add a second scope (e.g. <code>=acme my</code> vs <code>=acme search</code>) and route between them with <code>match:</code>.</li>
-          <li><a href="/docs/utilities/spec#6-3-merge--combine-arrays-into-a-unified-row-set">Merge.</a> When upstream sources have <em>different</em> schemas (e.g. PagerDuty + Datadog + ServiceNow incidents), use the full <code>merge:</code> primitive with per-source field mapping instead of a single <code>transform</code>.</li>
-          <li><a href="/docs/utilities/spec#8-actions">Actions.</a> Add typed actions on rows (open in source, run a tool, pipe into the composer). <code>=status</code> above shows the simplest pattern.</li>
+          <li><a href="/docs/utilities/gallery/">Sample gallery.</a> Real-world manifests for Jira, Salesforce, Slack, Notion, Linear, GitHub, and more. Fork one as a starting point for your own.</li>
+          <li><a href="/docs/utilities/spec/">Full manifest spec (v1).</a> Every field, every step kind, every validation rule. The source of truth.</li>
+          <li><a href="/docs/utilities/spec/#5-scopes">Scopes.</a> Add a second scope (e.g. <code>=acme my</code> vs <code>=acme search</code>) and route between them with <code>match:</code>.</li>
+          <li><a href="/docs/utilities/spec/#6-3-merge--combine-arrays-into-a-unified-row-set">Merge.</a> When upstream sources have <em>different</em> schemas (e.g. PagerDuty + Datadog + ServiceNow incidents), use the full <code>merge:</code> primitive with per-source field mapping instead of a single <code>transform</code>.</li>
+          <li><a href="/docs/utilities/spec/#8-actions">Actions.</a> Add typed actions on rows (open in source, run a tool, pipe into the composer). <code>=status</code> above shows the simplest pattern.</li>
         </ul>
       </div>
     </section>

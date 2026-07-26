@@ -15,6 +15,10 @@ export default defineConfig({
     // the brief publish of those pages still resolve.
     '/apps': '/docs/utilities',
     '/apps/trust': '/docs/utilities#trust',
+    // The platform-overview page moved from /solution to /platform to end the
+    // singular/plural collision with the /solutions industry index. Old links
+    // (and any indexed pages) 301 to the new canonical.
+    '/solution': '/platform',
     // Trial flow was retired when Bolt became free for individuals.
     // Old links to the trial-quickstart doc redirect to the renamed
     // /docs/quickstart so any indexed pages keep working.

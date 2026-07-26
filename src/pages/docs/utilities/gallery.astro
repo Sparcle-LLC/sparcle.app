@@ -58,7 +58,7 @@ function runtimeVariant(runtime?: string): "brand" | "neutral" | "success" | "wa
   <main class="gallery-page">
     <section class="gallery-hero">
       <div class="container">
-        <p class="gallery-eyebrow"><a href="/docs/utilities">&larr; Apps</a></p>
+        <p class="gallery-eyebrow"><a href="/docs/utilities/">&larr; Apps</a></p>
         <h1>Sample integrations.</h1>
         <p class="gallery-lede">
           {sampleCount} App manifests, bundled with Bolt: {connectors.length}
@@ -68,9 +68,9 @@ function runtimeVariant(runtime?: string): "brand" | "neutral" | "success" | "wa
           pipe. Each manifest is plain YAML you can read, fork, or extend.
         </p>
         <ul class="gallery-pills">
-          <li><a href="/docs/utilities/quickstart">Write your own &rarr;</a></li>
-          <li><a href="/docs/utilities/spec">Manifest spec (v1) &rarr;</a></li>
-          <li><a href="/docs/utilities">Apps overview &rarr;</a></li>
+          <li><a href="/docs/utilities/quickstart/">Write your own &rarr;</a></li>
+          <li><a href="/docs/utilities/spec/">Manifest spec (v1) &rarr;</a></li>
+          <li><a href="/docs/utilities/">Apps overview &rarr;</a></li>
         </ul>
       </div>
     </section>
@@ -115,7 +115,7 @@ function runtimeVariant(runtime?: string): "brand" | "neutral" | "success" | "wa
           (<code>bridge</code>), a loopback HTTP read (<code>http_local</code>),
           or a pure on-device <code>transform</code> pipe (no command, no
           network, no auth). Drop the YAML into your user-apps folder; no server,
-          no OAuth. <a href="/docs/utilities/spec">Manifest spec &sect;19 &rarr;</a>
+          no OAuth. <a href="/docs/utilities/spec/">Manifest spec &sect;19 &rarr;</a>
         </p>
         <div class="gallery-grid">
           {userApps.map((s) => (
@@ -140,7 +140,7 @@ function runtimeVariant(runtime?: string): "brand" | "neutral" | "success" | "wa
     <section class="gallery-section gallery-section-final">
       <div class="container">
         <p class="gallery-footnote">
-          Don't see what you need? <a href="/docs/utilities/quickstart">Write a custom utility</a>
+          Don't see what you need? <a href="/docs/utilities/quickstart/">Write a custom utility</a>
           in a few lines of YAML, or
           <a href="#" onclick="openContactModal('Utility Manifest Request'); return false;">tell us what's missing</a>.
         </p>

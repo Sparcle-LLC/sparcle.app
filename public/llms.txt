@@ -63,7 +63,7 @@ Aeira is a sovereign enterprise data plane. It indexes internal documents, wikis
 - Security: https://sparcle.app/security
 - Integrations: https://sparcle.app/integrations
 - The Crisis (why enterprise AI is broken): https://sparcle.app/crisis
-- Our Solution (sovereignty architecture): https://sparcle.app/solution
+- Our Platform (sovereignty architecture): https://sparcle.app/platform
 - Why Sparcle: https://sparcle.app/why-sparcle
 - Pricing: https://sparcle.app/pricing
 - Founding Customers Program: https://sparcle.app/pricing#founding-customers
