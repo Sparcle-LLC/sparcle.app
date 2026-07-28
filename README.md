@@ -103,17 +103,37 @@ under NDA during pilot evaluation.
 
 ## About this repository
 
-This repository holds the source of [sparcle.app](https://sparcle.app), the public product
-site. It is proprietary; see [LICENSE](LICENSE) and [NOTICE.txt](NOTICE.txt).
+This repository publishes Bolt. Every installer, the CLI binaries, the checksum manifest and
+its signature are released here, and the installers people run point at exactly these URLs.
 
-Product copy here is guarded, not just reviewed. The build runs three checks before it will
-produce a deploy, and each fails the build rather than warning:
+It is deliberately public and will stay that way. A private repository does not serve release
+assets to an anonymous download: the URL returns 404 without a token, which would break
+`curl | sh`, Homebrew, winget, and the update check compiled into every copy of Bolt already
+installed. The website source moved to a private repository; the artifacts stay here, because
+artifacts are what a download needs to be public.
 
-| Guard | Enforces |
-|---|---|
-| `scripts/check-claims.sh` | No claim the shipped code cannot defend. Every ban cites the code that makes the phrasing false. |
-| `scripts/check-no-internal.sh` | No internal-marked content reaches a published page or PDF. |
-| `scripts/check-emdash.sh` | House style. |
+Proprietary; see [LICENSE](LICENSE) and [NOTICE.txt](NOTICE.txt).
 
-If a claim becomes true, update the evidence and remove the ban in the same commit. Do not
-silence a guard to ship copy.
+## Verify a download
+
+A checksum proves a file arrived intact. It does not prove who made it, since anyone able to
+replace an installer could replace the checksum list in the same action. So the checksum
+manifest itself is signed, and the public key is published on our own domain rather than
+beside the file it signs, which means forging a download requires compromising both.
+
+```sh
+curl -LO https://sparcle.app/releases/latest/SHA256SUMS
+curl -LO https://sparcle.app/releases/latest/SHA256SUMS.minisig
+
+# proves origin. If this fails, stop: the checksums cannot be trusted either.
+minisign -Vm SHA256SUMS -P 'RWR074VTKBGzGWsQbnByhGrH9pQG5uHOJSgqL8rs5Zu4GQAxZ1C+JIza'
+
+# only once the signature verifies
+shasum -a 256 --ignore-missing -c SHA256SUMS
+```
+
+Each release also carries `VIRUSTOTAL.md`, a report link per installer, so you can read roughly
+seventy independent scanners instead of taking our word for it.
+
+Full instructions, including what we do not yet claim about Apple notarization and Windows
+SmartScreen: [sparcle.app/trust/verify-download](https://sparcle.app/trust/verify-download/).
