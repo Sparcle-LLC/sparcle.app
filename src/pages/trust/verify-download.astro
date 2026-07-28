@@ -76,7 +76,7 @@ const steps = [
 
   <PageSection
     title="Verifying, step by step"
-    lede="Signed checksum manifests begin with the next release. This key is published ahead of it deliberately. A key that appears at the same moment as the first signature it validates gives you nothing to have trusted beforehand. Releases before that carry SHA256SUMS but no signature, so step 3 works on them and step 2 does not."
+    lede="These three commands work on the current release right now. Older releases carry SHA256SUMS without a signature, so step 3 works on them and step 2 does not; every release from v0.1.140 onward is signed."
   >
     {steps.map((s) => (
       <div class="verify-step">
@@ -115,11 +115,13 @@ const steps = [
   </PageSection>
 
   <CTAStrip
+    variant="band"
     title="Something not verifying?"
-    body="If a signature or checksum does not match, do not install it. Tell us."
-    ctaLabel="bolt@sparcle.app"
-    ctaHref="mailto:bolt@sparcle.app"
-  />
+    lede="If a signature or checksum does not match, do not install it. Tell us and we will confirm what the current release should be."
+  >
+    <a href="mailto:bolt@sparcle.app" class="btn btn-primary btn-lg">Email bolt@sparcle.app</a>
+    <a href="/trust/" class="btn btn-secondary btn-lg">Back to Trust Center</a>
+  </CTAStrip>
 </BaseLayout>
 
 <style>
