@@ -19,8 +19,8 @@ DNS is already on Cloudflare. The rest is dashboard work plus pushing the code i
 ## Phase 1 — Connect Pages to GitHub
 
 1. `dash.cloudflare.com` → **Workers & Pages** → **Create** → **Pages** tab → **Connect to Git** → **Get started** under "Import an existing Git repository".
-2. Authorize GitHub access to the `Sparcle-LLC` org.
-3. Pick repo `Sparcle-LLC/sparcle.app` → **Begin setup**.
+2. Authorize GitHub access to the `SparcleHQ` org.
+3. Pick repo `SparcleHQ/sparcle.app` → **Begin setup**.
 4. Build configuration:
 
    | Field | Value |
@@ -111,7 +111,7 @@ Only after Phase 5 works.
 
 After Phase 6 is verified (give it a day).
 
-1. GitHub → `Sparcle-LLC/sparcle.app` → **Settings** → **Pages** → Source → **None**.
+1. GitHub → `SparcleHQ/sparcle.app` → **Settings** → **Pages** → Source → **None**.
 2. Delete `CNAME` from the repo (it's only used by GitHub Pages).
 3. (Optional) Delete `.github/workflows/deploy-site.yml` — it's already disabled (manual trigger only).
 
