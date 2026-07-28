@@ -20,7 +20,7 @@ const steps = [
   },
   {
     title: "2. Check the signature against our key",
-    body: "This is the step that proves origin. If it fails, stop — the checksums themselves cannot be trusted, so verifying against them would be meaningless.",
+    body: "This is the step that proves origin. If it fails, stop. The checksums themselves cannot be trusted, so verifying against them would be meaningless.",
     code: `minisign -Vm SHA256SUMS -P '${RELEASE_PUBKEY}'`,
   },
   {
@@ -48,7 +48,7 @@ const steps = [
     <CardGrid>
       <Card title="What the signature covers">
         One signature over SHA256SUMS covers every artifact in the release, because that file
-        lists them all — installers, the CLI binaries, every platform.
+        lists them all: installers, the CLI binaries, every platform.
       </Card>
       <Card title="Why the key is on this page">
         The signature and checksums are on GitHub. The key is here. Forging a download means
@@ -76,7 +76,7 @@ const steps = [
 
   <PageSection
     title="Verifying, step by step"
-    lede="Signed checksum manifests begin with the next release. This key is published ahead of it deliberately — a key that appears at the same moment as the first signature it validates gives you nothing to have trusted beforehand. Releases before that carry SHA256SUMS but no signature, so step 3 works on them and step 2 does not."
+    lede="Signed checksum manifests begin with the next release. This key is published ahead of it deliberately. A key that appears at the same moment as the first signature it validates gives you nothing to have trusted beforehand. Releases before that carry SHA256SUMS but no signature, so step 3 works on them and step 2 does not."
   >
     {steps.map((s) => (
       <div class="verify-step">
@@ -116,7 +116,7 @@ const steps = [
 
   <CTAStrip
     title="Something not verifying?"
-    body="If a signature or checksum does not match, do not install it — tell us."
+    body="If a signature or checksum does not match, do not install it. Tell us."
     ctaLabel="bolt@sparcle.app"
     ctaHref="mailto:bolt@sparcle.app"
   />
