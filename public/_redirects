@@ -1,11 +1,14 @@
-# Stable, vendor-neutral URLs for release verification artifacts.
+# Stable, vendor-neutral URLs for everything published on a release.
 #
-# The company is Sparcle Inc and the org is SparcleHQ; the old Sparcle-LLC name still redirects, so
-# raw release URL prints an outdated legal name in front of anyone verifying a download. These
-# redirects let the documentation, the installer, and the trust pages reference sparcle.app
-# only. Renaming the org would rewrite every historical release URL, every installed client's
-# updater endpoint, and the manifests already submitted to winget and Homebrew, so this is the
-# surface fix; the rename stays a separate, deliberate decision.
-/releases/latest/SHA256SUMS          https://github.com/SparcleHQ/sparcle.app/releases/latest/download/SHA256SUMS          302
-/releases/latest/SHA256SUMS.minisig  https://github.com/SparcleHQ/sparcle.app/releases/latest/download/SHA256SUMS.minisig  302
-/releases/latest/VIRUSTOTAL.md       https://github.com/SparcleHQ/sparcle.app/releases/latest/download/VIRUSTOTAL.md       302
+# One splat covers the verification files, the installers, and the updater manifests, so
+# nothing we document or ship has to name the GitHub organisation. That matters twice over.
+# The org was renamed from Sparcle-LLC to SparcleHQ and the company is Sparcle Inc, so a raw
+# release URL prints a legal name we no longer use in front of the person verifying a
+# download. And it moves the indirection onto a domain we own, so the backing store can change
+# later without breaking anything that already points here.
+#
+# The updater endpoint compiled into shipped clients still names Sparcle-LLC directly and works
+# only through GitHub's org-rename redirect, which is a dependency we do not control. Future
+# builds should point at this path instead. That helps new builds only, since the endpoint is
+# baked in at build time, which is the reason to start soon rather than later.
+/releases/latest/*  https://github.com/SparcleHQ/sparcle.app/releases/latest/download/:splat  302
