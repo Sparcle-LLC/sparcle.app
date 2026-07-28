@@ -968,13 +968,31 @@ install_macos() {
   [ "$installed" -eq 1 ] || { hdiutil detach "${MOUNT_POINT}" -quiet 2>/dev/null; fail "Failed to install ${APP_NAME}."; }
   ok "Installed to ${INSTALL_APP_PATH}"
 
-  info "Marking ${APP_NAME} as trusted..."
-  if ! xattr -cr "${INSTALL_APP_PATH}" 2>/dev/null; then
-    if [ -r /dev/tty ]; then
-      sudo xattr -cr "${INSTALL_APP_PATH}" 2>/dev/null < /dev/tty || true
+  # Gatekeeper. Two eras, one code path, no installer change on the day the
+  # Apple Developer ID cert lands (enrollment JMFF8KMF5W):
+  #
+  #   NOT notarized (today, self-signed cert) — strip com.apple.quarantine so
+  #     Gatekeeper never evaluates the app. Without this the user gets
+  #     "cannot be opened because the developer cannot be verified".
+  #   NOTARIZED (once the Apple cert ships) — do NOT strip. The stapled ticket
+  #     is what we want Gatekeeper to see: it's the whole point of notarizing,
+  #     it keeps the quarantine provenance macOS uses for later checks, and a
+  #     blanket `xattr -cr` would throw away the trust we just paid for.
+  #
+  # `stapler validate` is the honest test — it passes only when a real Apple
+  # ticket is stapled to THIS bundle, so the branch flips by itself the first
+  # time a notarized build is installed.
+  if xcrun stapler validate "${INSTALL_APP_PATH}" >/dev/null 2>&1; then
+    ok "Notarized by Apple — Gatekeeper will verify it natively"
+  else
+    info "Marking ${APP_NAME} as trusted..."
+    if ! xattr -cr "${INSTALL_APP_PATH}" 2>/dev/null; then
+      if [ -r /dev/tty ]; then
+        sudo xattr -cr "${INSTALL_APP_PATH}" 2>/dev/null < /dev/tty || true
+      fi
     fi
+    ok "App trusted — ready to launch"
   fi
-  ok "App trusted — ready to launch"
 
   APP_IDENTIFIER="app.sparcle.bolt.enterprise"
   persist_pg_runtime_sources "$APP_IDENTIFIER"
