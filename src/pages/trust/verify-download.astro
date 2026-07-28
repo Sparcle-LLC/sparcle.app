@@ -16,7 +16,7 @@ const steps = [
   {
     title: "1. Download the checksums and the signature",
     body: "Both live on the release you downloaded from. SHA256SUMS lists a SHA-256 for every installer and CLI binary in that release; SHA256SUMS.minisig is our signature over that file.",
-    code: "curl -LO https://github.com/Sparcle-LLC/sparcle.app/releases/latest/download/SHA256SUMS\ncurl -LO https://github.com/Sparcle-LLC/sparcle.app/releases/latest/download/SHA256SUMS.minisig",
+    code: "curl -LO https://sparcle.app/releases/latest/SHA256SUMS\ncurl -LO https://sparcle.app/releases/latest/SHA256SUMS.minisig",
   },
   {
     title: "2. Check the signature against our key",
@@ -67,7 +67,7 @@ const steps = [
       (<code>brew install minisign</code>, <code>apt install minisign</code>). This key signs
       the checksum manifest of every Bolt release.
     </p>
-    <pre><code>{RELEASE_PUBKEY}</code></pre>
+    <div class="vd-code-block"><code>{RELEASE_PUBKEY}</code></div>
     <p>
       If this key ever changes we will say so here and explain why. A key that changes without
       explanation is a reason to stop and ask us.
@@ -82,29 +82,29 @@ const steps = [
       <div class="verify-step">
         <h3>{s.title}</h3>
         <p>{s.body}</p>
-        <pre><code>{s.code}</code></pre>
+        <div class="vd-code-block"><code>{s.code}</code></div>
       </div>
     ))}
   </PageSection>
 
   <PageSection
-    title="What we do not yet claim"
-    lede="Being straight about the current state is more useful to a security reviewer than a reassuring summary."
+    title="Platform trust, and where it stands"
+    lede="Two platform-level certifications are in progress. Neither affects the verification above, which works today and depends on no one else."
   >
     <CardGrid>
       <Card title="macOS Gatekeeper">
-        Bolt is not yet notarized by Apple, so macOS will not vouch for it natively and our
-        installer clears the quarantine attribute during install. That is a step you should
-        normally be suspicious of, which is exactly why we are naming it. Apple Developer
-        enrollment is in progress; when it completes, builds will be signed with an
-        Apple-issued Developer ID and notarized, and that step disappears. Until then, the
-        signature verification above is the strongest assurance we can offer, and it does not
-        depend on Apple.
+        <strong>Apple notarization: in progress.</strong> Developer enrollment is underway.
+        Until it completes, macOS cannot vouch for Bolt natively, so our installer clears the
+        quarantine attribute during install. We would rather name that than have you find it in
+        the script: it is the one step in the install we would want explained to us. When
+        enrollment lands, builds are signed with an Apple-issued Developer ID and notarized, and
+        the step goes away with no action from you.
       </Card>
       <Card title="Windows SmartScreen">
-        Windows builds are not yet signed with an Authenticode certificate, so SmartScreen may
-        warn on first run. A certificate is in procurement. The checksum signature above
-        verifies Windows downloads today, independently of SmartScreen.
+        <strong>Authenticode certificate: in procurement.</strong> Until it is issued,
+        SmartScreen may warn on first run. The signature above already verifies Windows
+        downloads today, independently of SmartScreen, and the current Windows installer is
+        clean across every engine on VirusTotal.
       </Card>
       <Card title="In-app updates">
         Updates delivered inside Bolt are separately signed and verified by the app against a
@@ -125,7 +125,29 @@ const steps = [
 </BaseLayout>
 
 <style>
-  .verify-step { margin-bottom: 2rem; }
+  /* Same terminal treatment as the download page's install command, deliberately: a reader
+     who has just copied `curl | sh` from there should recognise these as the same kind of
+     thing. Unstyled <pre> rendered as plain prose and the commands disappeared into the text. */
+  .vd-code-block {
+    background: #0f1424;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    margin: 0.75rem 0 0;
+    overflow-x: auto;
+  }
+  .vd-code-block code {
+    display: block;
+    font-size: 0.82rem;
+    color: #a6e3a1;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
+    user-select: all;   /* one click selects the whole command, or the whole key */
+    line-height: 1.6;
+  }
+  .verify-step { margin-bottom: 2.25rem; }
   .verify-step h3 { margin-bottom: 0.35rem; }
-  .verify-step pre { overflow-x: auto; }
+  .verify-step p { margin-bottom: 0; }
 </style>
