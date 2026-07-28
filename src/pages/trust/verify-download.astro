@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../../components/ui/Hero.astro";
+import PageSection from "../../components/ui/PageSection.astro";
+import CardGrid from "../../components/ui/CardGrid.astro";
+import Card from "../../components/ui/Card.astro";
+import CTAStrip from "../../components/ui/CTAStrip.astro";
+
+// The Sparcle release signing key. Published HERE, on sparcle.app, deliberately: the
+// signature and the checksums live on the GitHub release, so anyone forging a download would
+// have to compromise both the release and this site. A public key beside the file it signs
+// proves nothing.
+const RELEASE_PUBKEY = "RWR074VTKBGzGWsQbnByhGrH9pQG5uHOJSgqL8rs5Zu4GQAxZ1C+JIza";
+
+const steps = [
+  {
+    title: "1. Download the checksums and the signature",
+    body: "Both live on the release you downloaded from. SHA256SUMS lists a SHA-256 for every installer and CLI binary in that release; SHA256SUMS.minisig is our signature over that file.",
+    code: "curl -LO https://github.com/Sparcle-LLC/sparcle.app/releases/latest/download/SHA256SUMS\ncurl -LO https://github.com/Sparcle-LLC/sparcle.app/releases/latest/download/SHA256SUMS.minisig",
+  },
+  {
+    title: "2. Check the signature against our key",
+    body: "This is the step that proves origin. If it fails, stop — the checksums themselves cannot be trusted, so verifying against them would be meaningless.",
+    code: `minisign -Vm SHA256SUMS -P '${RELEASE_PUBKEY}'`,
+  },
+  {
+    title: "3. Check your download against the checksums",
+    body: "Only once the signature verifies. On macOS and Linux, shasum reads the manifest and reports OK for the file you have.",
+    code: "shasum -a 256 --ignore-missing -c SHA256SUMS",
+  },
+];
+---
+
+<BaseLayout
+  title="Verify your download | Sparcle"
+  description="How to confirm a Bolt download came from Sparcle and has not been tampered with: the release signing public key, and the exact commands to verify checksums and signature."
+>
+  <Hero
+    eyebrow="Trust"
+    title="Verify your download."
+    lede="Anyone can publish a file. These are the commands that prove the one you downloaded is the one we built."
+  />
+
+  <PageSection
+    title="Why a checksum alone is not enough"
+    lede="A SHA-256 proves a file arrived intact. It does not prove who made it: whoever could replace an installer could replace the checksum list in the same action, and both would still match. So we sign the checksum list itself, and publish the key here rather than next to it."
+  >
+    <CardGrid>
+      <Card title="What the signature covers">
+        One signature over SHA256SUMS covers every artifact in the release, because that file
+        lists them all — installers, the CLI binaries, every platform.
+      </Card>
+      <Card title="Why the key is on this page">
+        The signature and checksums are on GitHub. The key is here. Forging a download means
+        compromising both, not one.
+      </Card>
+      <Card title="If verification fails">
+        Do not install it. Tell us at bolt@sparcle.app and we will confirm what the current
+        release should be.
+      </Card>
+    </CardGrid>
+  </PageSection>
+
+  <PageSection title="The Sparcle release signing key">
+    <p>
+      Ed25519, via <a href="https://jedisct1.github.io/minisign/">minisign</a>
+      (<code>brew install minisign</code>, <code>apt install minisign</code>). This key signs
+      the checksum manifest of every Bolt release.
+    </p>
+    <pre><code>{RELEASE_PUBKEY}</code></pre>
+    <p>
+      If this key ever changes we will say so here and explain why. A key that changes without
+      explanation is a reason to stop and ask us.
+    </p>
+  </PageSection>
+
+  <PageSection
+    title="Verifying, step by step"
+    lede="Signed checksum manifests begin with the next release. This key is published ahead of it deliberately — a key that appears at the same moment as the first signature it validates gives you nothing to have trusted beforehand. Releases before that carry SHA256SUMS but no signature, so step 3 works on them and step 2 does not."
+  >
+    {steps.map((s) => (
+      <div class="verify-step">
+        <h3>{s.title}</h3>
+        <p>{s.body}</p>
+        <pre><code>{s.code}</code></pre>
+      </div>
+    ))}
+  </PageSection>
+
+  <PageSection
+    title="What we do not yet claim"
+    lede="Being straight about the current state is more useful to a security reviewer than a reassuring summary."
+  >
+    <CardGrid>
+      <Card title="macOS Gatekeeper">
+        Bolt is not yet notarized by Apple, so macOS will not vouch for it natively and our
+        installer clears the quarantine attribute during install. That is a step you should
+        normally be suspicious of, which is exactly why we are naming it. Apple Developer
+        enrollment is in progress; when it completes, builds will be signed with an
+        Apple-issued Developer ID and notarized, and that step disappears. Until then, the
+        signature verification above is the strongest assurance we can offer, and it does not
+        depend on Apple.
+      </Card>
+      <Card title="Windows SmartScreen">
+        Windows builds are not yet signed with an Authenticode certificate, so SmartScreen may
+        warn on first run. A certificate is in procurement. The checksum signature above
+        verifies Windows downloads today, independently of SmartScreen.
+      </Card>
+      <Card title="In-app updates">
+        Updates delivered inside Bolt are separately signed and verified by the app against a
+        key built into it, so an update cannot be swapped even if a release were altered. That
+        is automatic and needs nothing from you.
+      </Card>
+    </CardGrid>
+  </PageSection>
+
+  <CTAStrip
+    title="Something not verifying?"
+    body="If a signature or checksum does not match, do not install it — tell us."
+    ctaLabel="bolt@sparcle.app"
+    ctaHref="mailto:bolt@sparcle.app"
+  />
+</BaseLayout>
+
+<style>
+  .verify-step { margin-bottom: 2rem; }
+  .verify-step h3 { margin-bottom: 0.35rem; }
+  .verify-step pre { overflow-x: auto; }
+</style>
