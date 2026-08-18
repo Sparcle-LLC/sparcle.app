@@ -1,0 +1,106 @@
+# gitleaks configuration — Bolt repos
+#
+# Two things make a naive scan useless here, and both are properties of what this
+# product IS rather than sloppiness:
+#
+#   1. Bolt's whole job is DETECTING secrets and PII. The detector test suites are
+#      corpora of realistic-looking API keys, tokens and private keys — they must
+#      look real or the detectors aren't tested. Every one of them trips a scanner.
+#   2. Build outputs (target/, node_modules/, dist/, .app bundles) embed the
+#      installed-app OAuth client, and re-scanning compiled artifacts reports the
+#      same finding hundreds of times.
+#
+# So: scan SOURCE, allow FIXTURES. A finding that survives this config is a real
+# secret in real code, which is the only signal worth failing a build on.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Build outputs, vendored deps, and detector test fixtures"
+paths = [
+  # ── build outputs / vendored: never authored here ──
+  '''(^|/)target/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''(^|/)\.svelte-kit/''',
+  '''(^|/)coverage/''',
+  '''\.app/''',
+  '''(^|/)binaries-[^/]+/''',
+  '''\.(lock|min\.js|map|wasm|dylib|so|dll|exe)$''',
+
+  # ── detector/PII test corpora: fake secrets are the POINT of these files ──
+  '''(^|/)tests?/''',
+  '''(^|/)e2e/''',
+  '''(^|/)spec/''',
+  '''\.test\.(ts|js|rs|py)$''',
+  '''\.spec\.(ts|js)$''',
+  '''golden''',
+  '''corpus''',
+  '''__corpus__''',
+  '''vectors\.json$''',
+  '''recognizer-vectors''',
+  '''characterization''',
+  '''(^|/)data/guest/''',          # guest-mode demo dataset: synthetic personas
+  '''(^|/)scripts/mock-mcps/''',   # mock MCP servers for local testing
+  '''(^|/)test-mcp-server/''',
+  '''securityPack''',              # the secret-shape detector + its fixtures
+  '''clipboard_secrets\.rs$''',    # detects secrets in clipboard: holds sample shapes
+  '''cheatsheetCatalog\.ts$''',    # user-facing cheatsheet showing token FORMATS
+
+  # ── docs that document credential formats ──
+  '''(^|/)docs/''',
+  '''\.env\.example$''',
+  '''README''',
+]
+# Match these against the whole LINE, not just the captured secret: what makes
+# these safe is the surrounding context (a doc comment, a storage-key name, an
+# empty env assignment), which the captured fragment alone does not show.
+regexTarget = "line"
+regexes = [
+  # localStorage / cache key NAMES, not credentials. "STORAGE_KEY = 'bolt.x.y'"
+  # is the single most common false positive in the PWA.
+  '''(?i)(STORAGE_KEY|storageKey|CACHE_KEY|cacheKey|_KEY)\s*[:=]\s*['"][a-zA-Z0-9._:\-]+['"]''',
+  # Canonical PLACEHOLDER credentials. These appear in inline #[test] modules and
+  # docs precisely because they are the industry's known-fake values; a scanner
+  # that fails on them trains people to ignore it.
+  '''AKIAIOSFODNN7EXAMPLE''',
+  '''(?i)(EXAMPLE|PLACEHOLDER|REDACTED|DUMMY|FAKE|SAMPLE|CHANGEME|YOUR[_-]?(KEY|TOKEN|SECRET))''',
+  '''abcdefghij''',                       # sequential alphabet = hand-typed fake
+  '''(?i)(x{4,}|(xX){3,}|0{6,}|1234567890)''',
+  '''sk_(live|test)_51[A-Za-z]*[xX]{2,}''',
+
+  # A PEM header inside a doc comment (`///   - \`-----BEGIN PRIVATE KEY-----\``)
+  # documents the accepted key FORMAT. Nothing follows it.
+  '''^\s*(///|//|#|\*)''',
+  # Test keypairs generated for unit tests, named as such.
+  '''(?i)(TEST|SAMPLE|DUMMY|FIXTURE)_(PRIVATE_)?KEY''',
+  # Browser-extension manifest "key" is the extension's PUBLIC key — it exists to
+  # pin a stable extension ID and is public by design.
+  '''"key"\s*:\s*"MII[A-Za-z0-9+/=]+"''',
+  # RFC 8291 web-push test vector (the spec's own example auth secret).
+  '''BTBZMqHH6r4Tts7J_aSIgg''',
+  # Shell/CI env assignments that carry no value, e.g. VITE_API_BASE_URL=""
+  '''[A-Z_]+=(""|''|\$\{?[A-Za-z_]+\}?)''',
+
+  # An assertion that a generated key STARTS WITH a PEM header — the test is that
+  # the header is right; there is no key material on the line.
+  '''starts_with\(b?"-----BEGIN''',
+
+  # PEM headers quoted inside source as a FORMAT description, not a key body.
+  '''-----BEGIN (RSA |EC |OPENSSH |PGP )?(PRIVATE KEY|PRIVATE KEY BLOCK)-----['"\s]*(\\n|\+|$)''',
+]
+
+# Stopwords match against the SECRET itself: a credential whose own body says
+# "test"/"abc123"/"operator-supplied" is a fixture by construction. This is the
+# backstop for test material that sits inline in src/ (an `#[cfg(test)]` module
+# in tls.rs, a mock MCP auth payload) where no path rule can reach it.
+stopwords = [
+  "abc123",
+  "operator-supplied",
+  "sufficient-length",
+  "MIIEowIBAAKCAQEAzaxa",   # RSA keypair generated for src/server/tls.rs unit tests
+  "changeme",
+  "notasecret",
+]
