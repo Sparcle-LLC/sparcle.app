@@ -137,3 +137,16 @@ seventy independent scanners instead of taking our word for it.
 
 Full instructions, including what we do not yet claim about Apple notarization and Windows
 SmartScreen: [sparcle.app/trust/verify-download](https://sparcle.app/trust/verify-download/).
+
+## Report a bug
+
+Found something broken? [Open an issue](https://github.com/SparcleHQ/sparcle.app/issues/new/choose).
+Bug reports and feature requests for Bolt and Aeira are tracked here, in public.
+
+**Security vulnerabilities do not go in an issue.** Email <security@sparcle.app>; the policy,
+including our response commitments and safe harbor for good-faith research, is at
+[sparcle.app/trust/vulnerability-disclosure](https://sparcle.app/trust/vulnerability-disclosure/).
+See [SECURITY.md](SECURITY.md).
+
+Anything specific to your own deployment — self-hosting, licensing, procurement — goes to
+<bolt@sparcle.app> rather than a public issue.

@@ -1,0 +1,23 @@
+name: Feature request
+description: Something Bolt or Aeira should do and does not.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the task or workflow, not the feature you imagine. It helps us find a better answer than the one you asked for.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+    validations:
+      required: false
+  - type: textarea
+    id: workaround
+    attributes:
+      label: How do you handle it today?
+    validations:
+      required: false

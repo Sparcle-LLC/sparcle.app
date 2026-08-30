@@ -1,0 +1,74 @@
+name: Bug report
+description: Something in Bolt or Aeira does not work the way it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Two things before you start:
+
+        - **Do not report a security vulnerability here.** Email <security@sparcle.app> instead —
+          policy at [sparcle.app/trust/vulnerability-disclosure](https://sparcle.app/trust/vulnerability-disclosure/).
+        - **Do not paste confidential data.** Logs and screenshots can carry customer records,
+          source code, API keys, or PII. Redact before you attach.
+  - type: dropdown
+    id: product
+    attributes:
+      label: Product
+      options:
+        - Bolt (desktop app)
+        - Bolt (self-hosted server)
+        - Aeira
+        - Installer / download / update
+        - Website or docs
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Bolt shows this in Settings → About. If you cannot open the app, say which installer you ran.
+      placeholder: "0.1.160"
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system
+      placeholder: "macOS 26.5 (Apple Silicon) / Windows 11 23H2"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots, or error text
+      description: Redacted. Paste text rather than a photo of text where you can.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: This is not a security vulnerability (those go to security@sparcle.app).
+          required: true
+        - label: I have removed confidential data from anything I attached.
+          required: true

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://sparcle.app/trust/vulnerability-disclosure/
+    about: Never file a security issue publicly. Email security@sparcle.app — acknowledged within one business day.
+  - name: Enterprise or deployment support
+    url: mailto:bolt@sparcle.app
+    about: Self-hosting, licensing, procurement, or anything specific to your environment.
+  - name: Download and verify a release
+    url: https://sparcle.app/trust/verify-download/
+    about: Checksums, signatures, and what each installer is.
