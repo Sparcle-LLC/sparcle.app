@@ -57,10 +57,29 @@ body:
     validations:
       required: true
   - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: |
+        If Bolt failed to start, the loading screen has a **Copy details** button — paste that
+        block here. It carries version, edition, OS, architecture, the port, and the tail of
+        each log, which is usually enough for us to find the cause without asking you anything.
+
+        If the app did start, paste the version and OS instead and describe what you saw.
+      render: text
+    validations:
+      required: false
+  - type: textarea
     id: evidence
     attributes:
-      label: Logs, screenshots, or error text
-      description: Redacted. Paste text rather than a photo of text where you can.
+      label: Screenshots or error text
+      description: |
+        Paste text rather than a photo of text where you can.
+
+        **Read anything you attach before you attach it.** Log tails and screenshots from a
+        real deployment can contain message subjects, file names, identifiers, or customer
+        data. This issue is public and permanent. Redact, or email it to bolt@sparcle.app
+        instead.
     validations:
       required: false
   - type: checkboxes
