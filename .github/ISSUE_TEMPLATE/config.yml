@@ -1,11 +1,19 @@
+# GitHub adds its own "Report a security vulnerability" row automatically once
+# SECURITY.md exists, and that row cannot be removed. A second one here produced
+# two identically-titled entries in the chooser, which reads as a broken page
+# rather than an emphasis. The wording that mattered lives in SECURITY.md.
+#
+# Contact links must be http(s). A `mailto:` URL is dropped SILENTLY - the row
+# simply does not render, with no error anywhere. So the address goes in the
+# `about:` text, where it is visible, and the link points at a real page.
 blank_issues_enabled: true
 contact_links:
-  - name: Report a security vulnerability
-    url: https://sparcle.app/trust/vulnerability-disclosure/
-    about: Never file a security issue publicly. Email security@sparcle.app — acknowledged within one business day.
-  - name: Enterprise or deployment support
-    url: mailto:bolt@sparcle.app
-    about: Self-hosting, licensing, procurement, or anything specific to your environment.
+  - name: Enterprise, self-hosting, or deployment questions
+    url: https://sparcle.app/docs/
+    about: Anything specific to your own environment or licensing — email bolt@sparcle.app rather than opening a public issue.
   - name: Download and verify a release
     url: https://sparcle.app/trust/verify-download/
     about: Checksums, signatures, and what each installer is.
+  - name: Service status
+    url: https://sparcle.app/status/
+    about: Check here before reporting something that looks like an outage.
